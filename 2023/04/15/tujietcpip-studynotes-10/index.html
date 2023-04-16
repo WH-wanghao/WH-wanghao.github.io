@@ -1,0 +1,708 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>《图解TCP/IP》学习记录（10） | 归途</title><meta name="author" content="WangHao"><meta name="copyright" content="WangHao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="第2章、TCP &#x2F; IP 基础知识&#x3D;&#x3D;&#x3D; 2.1 &#x3D;&#x3D;&#x3D;	TCP &#x2F; IP 出现的背景及其历史目前，在计算机网络领域中，TCP&#x2F;IP 协议可谓名气最大、使用范围最广。那么 TCP&#x2F;IP 是如何在短时间内获得如此广泛普及的呢？有人认为是个人电脑的操作系统如 Windows 和 Mac OS 支持了 TCP&#x2F;IP 所致。虽">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《图解TCP&#x2F;IP》学习记录（10）">
+<meta property="og:url" content="http://example.com/2023/04/15/tujietcpip-studynotes-10/index.html">
+<meta property="og:site_name" content="归途">
+<meta property="og:description" content="第2章、TCP &#x2F; IP 基础知识&#x3D;&#x3D;&#x3D; 2.1 &#x3D;&#x3D;&#x3D;	TCP &#x2F; IP 出现的背景及其历史目前，在计算机网络领域中，TCP&#x2F;IP 协议可谓名气最大、使用范围最广。那么 TCP&#x2F;IP 是如何在短时间内获得如此广泛普及的呢？有人认为是个人电脑的操作系统如 Windows 和 Mac OS 支持了 TCP&#x2F;IP 所致。虽">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp">
+<meta property="article:published_time" content="2023-04-15T10:19:21.000Z">
+<meta property="article:modified_time" content="2023-04-16T07:45:40.923Z">
+<meta property="article:author" content="WangHao">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="《图解TCP&#x2F;IP》">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/04/15/tujietcpip-studynotes-10/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: WangHao","link":"链接: ","source":"来源: 归途","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '《图解TCP/IP》学习记录（10）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2023-04-16 15:45:40'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/transpancy.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304092347441.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp')"><nav id="nav"><span id="blog-info"><a href="/" title="归途"><span class="site-name">归途</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">《图解TCP/IP》学习记录（10）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-15T10:19:21.000Z" title="发表于 2023-04-15 18:19:21">2023-04-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-16T07:45:40.923Z" title="更新于 2023-04-16 15:45:40">2023-04-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E3%80%8A%E5%9B%BE%E8%A7%A3TCP-IP%E3%80%8B%EF%BC%88%E7%AC%AC%E4%BA%94%E7%89%88%EF%BC%89/">《图解TCP/IP》（第五版）</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="《图解TCP/IP》学习记录（10）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="第2章、TCP-x2F-IP-基础知识"><a href="#第2章、TCP-x2F-IP-基础知识" class="headerlink" title="第2章、TCP &#x2F; IP 基础知识"></a><center>第2章、TCP &#x2F; IP 基础知识</center></h1><h2 id="x3D-x3D-x3D-2-1-x3D-x3D-x3D-TCP-x2F-IP-出现的背景及其历史"><a href="#x3D-x3D-x3D-2-1-x3D-x3D-x3D-TCP-x2F-IP-出现的背景及其历史" class="headerlink" title="&#x3D;&#x3D;&#x3D; 2.1 &#x3D;&#x3D;&#x3D;	TCP &#x2F; IP 出现的背景及其历史"></a><center>&#x3D;&#x3D;&#x3D; 2.1 &#x3D;&#x3D;&#x3D;	TCP &#x2F; IP 出现的背景及其历史</center></h2><p style="text-indent:2em">目前，在计算机网络领域中，TCP/IP 协议可谓名气最大、使用范围最广。那么 TCP/IP 是如何在短时间内获得如此广泛普及的呢？有人认为是个人电脑的操作系统如 Windows 和 Mac OS 支持了 TCP/IP 所致。虽然这么说有一定的道理，但还不能算作 TCP/IP 普及的根本原因。其实，在当时围绕着整个计算机产业，全社会形成了一股支持 TCP/IP 的流行趋势，使得各家计算机厂商也不得不适应这种变化，不断生产支持 TCP/IP 的产品。现在，你在市面上几乎找不到一款不支持 TCP/IP 的操作系统。</p>
+
+<p style="text-indent:2em">那么，当时的计算机厂商又为何跟随潮流支持 TCP/IP 呢？要了解这个问题，我们不妨追溯一下互联网的发展历史。</p>
+
+
+
+<hr>
+<h3 id="—-2-1-1-—从军用技术的应用谈起"><a href="#—-2-1-1-—从军用技术的应用谈起" class="headerlink" title="— 2.1.1 —	从军用技术的应用谈起"></a>— 2.1.1 —	从军用技术的应用谈起</h3><p style="text-indent:2em">20 世纪 60 年代，很多大学和研究机构都开始着力于新的通信技术。其中有一家以美国国防部（DoD,The Department of Defense）为中心的组织也展开了类似的研究。</p>
+
+<p style="text-indent:2em">DoD 认为研发新的通信技术对于国防军事有着举足轻重的作用。该组织希望在通信传输的过程中，即使遭到了敌方的攻击和破坏，也可以经过迂回线路实现最终通信，保证通信不中断。如图 2.1 所示，倘若在中心位置的中央节点遇到攻击，就会影响整个网络的通信传输。然而，图 2.2 中网络呈现出由众多迂回线路组成的分布式通信，使其即便在某一处受到通信攻击，也会在迂回线路的极限范围内<b><i>始终保持通信无阻</i></b>。为了实现这种类型的网络，分组交换技术便应运而生。</p>
+
+<p style="text-indent:2em">人们之所以开始关注<b><i>分组交换技术</i></b>，不仅是因为它在军工防卫方面的应用，还在于这种技术本身的一些特征。<u>它可以使多个用户同一时间共享一条通信线路进行通信，从而提高了线路的使用效率，也降低了搭建线路的成本。</u></p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304151835618.png" alt="image-20230415183547432"></p>
+<center>--- 图 2.1 --- 容灾性较弱的中央集中式网络</center>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304151837408.png" alt="image-20230415183740293"></p>
+<center>--- 图 2.2 --- 容灾性较强的分组网络</center>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>始终保持通信无阻 ：分布式网络的概念于 1960 年由美国 RAND 研究所的 Paul Baran 提出。</p>
+<p>分组交换技术 ：通过分组交换技术实现的分组通信，是在1965年由英国 NPL (英国国家物理实验室)的 Donald Davies 提出。</p>
+<hr>
+<h3 id="—-2-1-2-—-ARPANET-的诞生"><a href="#—-2-1-2-—-ARPANET-的诞生" class="headerlink" title="— 2.1.2 — 	ARPANET  的诞生"></a>— 2.1.2 — 	ARPANET  的诞生</h3><p style="text-indent:2em">1969 年，为验证分组交换技术的实用性，研究人员搭建了一套网络。起初，该网络只连接了美国西海岸的大学和研究所等 <b><i>4个节点</i></b>。之后，随着美国国防部的重点开发和相关技术的飞速发展，普通用户也逐渐加入其中，发展成了后来巨大规模的网络。</p>
+
+<p style="text-indent:2em">该网络被人们称作 <b><i>ARPANET</i></b> ,也是全球互联网的鼻祖。在短短 3 年内，ARPANET 从曾经的 4 个节点迅速发展成为 34 个节点的超大网络。研究人员的实验也<b><i>获得了前所未有的成功</i></b>，并以此充分证明了基于分组交换技术的通信方法是可行的。</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>4个节点 ：这四个节点分别是 UCLA (加州大学洛杉矶分校)、UCSB (加州大学圣巴巴拉分校)、SRI (斯坦福研究所)和犹他州大学。</p>
+<p>ARPANET ：Advanced Research Projects Agency Network，阿帕网。</p>
+<p>获得了前所未有的成功 ：阿帕网的实验及其协议的开发，是由美国一个叫做 DARPA （Defense Advanced Research Projects Agency：国防部高级研究计划署）的政府机构资助的。</p>
+<hr>
+<h3 id="—-2-1-3-—TCP-x2F-IP-的诞生"><a href="#—-2-1-3-—TCP-x2F-IP-的诞生" class="headerlink" title="— 2.1.3 —	TCP &#x2F; IP 的诞生"></a>— 2.1.3 —	TCP &#x2F; IP 的诞生</h3><p style="text-indent:2em">ARPANET 的实验，不仅仅是利用几所大学与研究机构组成的主干网络进行分组交换的实验，还会进行在互连计算机之间提供可靠传输的综合性通信协议的实验。于是在 20 世纪 70 年代前半叶，ARPANET 中的一个研究机构研发出了 TCP/IP。在这之后，直到1982年，TCP/IP 的具体规范才被最终定下来，并于 1983 年成为 ARPANET 网络唯一指定的协议。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">年份</th>
+<th align="center">事件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">20世纪60年代后半叶</td>
+<td align="center">应 DoD 要求，美国开始进行通信技术相关的研发。</td>
+</tr>
+<tr>
+<td align="center">1969 年</td>
+<td align="center">ARPANET 诞生。开发分组交换技术。</td>
+</tr>
+<tr>
+<td align="center">1972 年</td>
+<td align="center">ARPANET 取得初步提升。扩展到 50 个节点。</td>
+</tr>
+<tr>
+<td align="center">1975 年</td>
+<td align="center">TCP&#x2F;IP 诞生。</td>
+</tr>
+<tr>
+<td align="center">1982 年</td>
+<td align="center">TCP&#x2F;IP 规范出炉。UNIX 最早开始实现 TCP&#x2F;IP 协议。</td>
+</tr>
+<tr>
+<td align="center">1983 年</td>
+<td align="center">ARPANET 决定正式启用 TCP&#x2F;IP 为通信协议。</td>
+</tr>
+<tr>
+<td align="center">1989 年左右</td>
+<td align="center">局域网上的 TCP&#x2F;IP 应用迅速扩大。</td>
+</tr>
+<tr>
+<td align="center">1990 年左右</td>
+<td align="center">不论是局域网还是广域网，都开始倾向于使用 TCP&#x2F;IP。</td>
+</tr>
+<tr>
+<td align="center">1995 年左右</td>
+<td align="center">互联网开始商用，互联网服务供应商的数量剧增。</td>
+</tr>
+<tr>
+<td align="center">1996 年</td>
+<td align="center">IPv6规范出炉，载入 RFC。（后于 1998 年修订）</td>
+</tr>
+</tbody></table>
+<center>--- 表 2.1 ---  TCP/IP的发展</center>
+
+
+
+
+
+<hr>
+<h3 id="—-2-1-4-—UNIX-系统的普及与互联网的扩张"><a href="#—-2-1-4-—UNIX-系统的普及与互联网的扩张" class="headerlink" title="— 2.1.4 —	UNIX 系统的普及与互联网的扩张"></a>— 2.1.4 —	UNIX 系统的普及与互联网的扩张</h3><p style="text-indent:2em">TCP/IP 的产生，ARPANET 起到了举足轻重的作用。然而，ARPANET 网络组成之初，由于其节点个数的限制，TCP/IP 的应用范围也受到一定的限制。那么，TCP/IP 后来又是如何在计算机网络中得到如此广泛普及的呢？</p>
+
+<p style="text-indent:2em">1980年左右，ARPANET 中的很多大学与研究机构开始使用一种叫做 BSD UNIX 的操作系统。由于 <b><i>BSD UNIX</i></b> 实现了 TCP/IP 协议，所以很快在 1983 年，TCP/IP 便被 ARPANET 正式采用。同年，前 SUN 公司也开始向一般用户提供实现了 TCP/IP 的产品。</p>
+
+<p style="text-indent:2em">20 世纪 80 年代不仅是局域网快速发展的时代，还是 UNIX 工作站迅速普及的时代，同时也是通过 TCP/IP 构建网络最为盛行的时代。基于这些趋势，那些大学和研究机构也逐渐开始将 ARPANET 连接到了 NSFnet 网络。此后，基于 TCP/IP 而形成的世界性范围的网络一互联网（The Internet）便诞生了。</p>
+
+<p style="text-indent:2em">以连接 UNIX 主机的形式连接各个终端节点，这一主要方式使互联网得到了迅速的普及。而作为计算机网络主流协议的 TCP/IP,它的发展也与 UNIX 密不可分。到了 80 年代后半叶，那些“各自为政”开发自己通信协议的网路设备供应商们，也陆续开始“顺从”于 TCP/IP 的规范，制造兼容性更好的产品以便用户使用。</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>BSD UNIX ：由美国加州大学伯克利分校开发的免费的 UNIX 系统。</p>
+<hr>
+<h3 id="—-2-1-5-—商用互联网服务的启蒙"><a href="#—-2-1-5-—商用互联网服务的启蒙" class="headerlink" title="— 2.1.5 —	商用互联网服务的启蒙"></a>— 2.1.5 —	商用互联网服务的启蒙</h3><p style="text-indent:2em">研发互联网最初的目的是用于实验和研究，到了 1990 年逐渐被引入公司企业及一般家庭。也出现了专门提供互联网接入服务的公司（称作 <b><i>ISP</i></b> ）,这些都使互联网得到了更为广泛的普及。同时，基于互联网技术的新型应用，如在线游戏、SNS、视频通信等商用服务也如雨后春笋般不断涌现出来。</p>
+
+<p style="text-indent:2em">于是，人们对拨号（当时<b><i>个人电脑通信通过拨号实现</i></b>）上网的要求越来越高，希望每两个人之间也都能够通过计算机实现通信。然而，个人电脑通信只能为有限的用户提供服务，而且多台电脑加入通信时操作方法又不相同，这给人们带来了一定的不便。</p>
+
+<p style="text-indent:2em">于是，面向公司企业和一般家庭提供专门互联网接入服务的<b><i>具有商用许可</i></b>的提供商（ ISP ）便出现了。这时，由于 TCP/IP 已长期应用于研究领域，使人们积累了丰富的经验，因此，面对这样一种成熟的技术，人们对于它的商用价值充满期待。</p>
+
+<p style="text-indent:2em">连接到互联网，人们可以从 WWW 获取世界各处的信息，可以通过电子邮件进行交流，还可以向全世界发布自己的消息。互联网中没有所谓会员的限制，它是一个连接全世界的公共网络。互联网使人们的生活变得更加多姿多彩，人们不仅可以享受多姿多彩的服务，还可以通过互联网自己开创新的服务。</p>
+
+<p style="text-indent:2em">互联网作为一种商用服务迅速发展起来。这使得到 90 年代为止一直占据主导地位的个人电脑通信也开始加入到互联网的行列中来，自由的、开放的互联网就这样以极快的速度为大众所认可，得到更为广泛的普及。</p>
+
+
+
+
+
+<hr>
+<h2 id="x3D-x3D-x3D-2-2-x3D-x3D-x3D-TCP-x2F-IP-的标准化"><a href="#x3D-x3D-x3D-2-2-x3D-x3D-x3D-TCP-x2F-IP-的标准化" class="headerlink" title="&#x3D;&#x3D;&#x3D; 2.2 &#x3D;&#x3D;&#x3D; 	TCP &#x2F; IP 的标准化"></a><center>&#x3D;&#x3D;&#x3D; 2.2 &#x3D;&#x3D;&#x3D; 	TCP &#x2F; IP 的标准化</center></h2><p style="text-indent:2em">20 世纪 90 年代，IS0 开展了 OSI 这一国际标准协议的标准化进程。然而，OSI 协议并没有得到普及，真正被广泛使用的是 TCP/IP 协议。</p>
+
+<p style="text-indent:2em">究其原因，是由 TCP/IP 的标准化所致。TCP/IP 的标准化中有其他协议的标准化没有的要求。这一点就是让 TCP/IP 更迅速地实现和普及的原动力。本节将介绍 TCP/IP 的标准化过程。</p>
+
+
+
+<hr>
+<h3 id="—-2-2-1-—TCP-x2F-IP-的具体含义"><a href="#—-2-2-1-—TCP-x2F-IP-的具体含义" class="headerlink" title="— 2.2.1 —	TCP &#x2F; IP 的具体含义"></a>— 2.2.1 —	TCP &#x2F; IP 的具体含义</h3><p style="text-indent:2em">从字面意义上讲，有人可能会认为 TCP/IP是指 TCP 与 IP 两种协议。实际生活当中有时也确实就是指这两种协议。然而在很多情况下，它只是利用 IP 进行通信时所必须用到的协议群的统称。具体来说，IP 或 ICMP、TCP 或 UDP、TELNET 或 FTP、以及 HTTP 等都属于 TCP/IP 的协议。它们与 TCP 或 IP 的关系紧密，是互联网必不可少的组成部分。TCP/IP 一词泛指这些协议，因此，有时也称 TCP/IP 为 <b><i>网际协议族</i></b>。
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304161340113.png" alt="image-20230416134019035"></p>
+<center>--- 图 2.3 --- TCP / IP 协议群</center>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>网际协议族 ：网际协议族（Internet Protocol Suite)，组成网际协议的一组协议。</p>
+<hr>
+<h3 id="—-2-2-2-—-TCP-x2F-IP-标准化精髓"><a href="#—-2-2-2-—-TCP-x2F-IP-标准化精髓" class="headerlink" title="— 2.2.2 — 	TCP &#x2F; IP 标准化精髓"></a>— 2.2.2 — 	TCP &#x2F; IP 标准化精髓</h3><p style="text-indent:2em">TCP/IP 的协议的标准化过程与其他的标准化过程有所不同，具有两大特点：一是具有开放性，二是注重实用性，即被标准化的协议能否被实际运用。</p>
+
+<p style="text-indent:2em">首先，开放性是由于 TCP/IP 的协议是由 IETF 讨论制定的，而 IETF 本身就是一个允许任何人加入进行讨论的组织。在这里人们通常采用电子邮件组的形式进行日常讨论，而邮件组可以由任何人随时订阅。</p>
+
+<p style="text-indent:2em">其次，在 TCP/IP 的标准化过程中，制订某一协议的规范本身已不再那么重要，而首要任务是实现真正能够实现通信的技术。难怪有人打趣到“ TCP/IP 简直就是先开发程序，后写规格标准”。</p>
+
+<p style="text-indent:2em">虽然这么说有点夸张，不过 TCP/IP 在制定某个协议规范的过程中确实会考虑到这个协议 <b><i>实现</i></b> 的可行性。而且在某个协议的最终详细规范出炉的同时，其中一些协议已在某些设备中存在，并且能够进行通信。</p>
+
+<p style="text-indent:2em">为此，TCP/IP 中只要某个协议的大致规范决定下来，人们就会在多个已实现该协议的设备之间进行通信实验，一旦发现有什么问题，可以继续在 IEFT 中讨论，及时修改程序、协议或相应的文档。经过这样一次又一次的讨论、实验和研究，一款协议的规范才会最终诞生。因此，TCP/IP 协议始终具有很强的实用性。</p>
+
+<p style="text-indent:2em">然而，对于那些由于实验环境的限制没有发现问题的协议，将会在后期继续进行改进。相比 TCP/IP，OSI 之所以未能达到普及，主要原因在于未能尽早地制定可行性较强的协议、未能提出应对技术快速革新的协议以及没有能及时进行后期改良的方案这几点。</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>实现 ：指开发那些能够让计算机设备按照协议预期产生某些动作或行为的程序和硬件。</p>
+<hr>
+<h3 id="—-2-2-3-—TCP-x2F-IP-规范——-RFC"><a href="#—-2-2-3-—TCP-x2F-IP-规范——-RFC" class="headerlink" title="— 2.2.3 —	TCP &#x2F; IP 规范—— RFC"></a>— 2.2.3 —	TCP &#x2F; IP 规范—— RFC</h3><p style="text-indent:2em">前面提到 TCP/IP 的协议由 IETF 讨论制定。那些需要标准化的协议，被人们列入 <b><i>RFC(Request For Comment)</i></b> 文档并在互联网上公布。RFC 不仅记录了协议规范内容，还包含了 <b><i>协议的实现和运用的相关信息</i></b>，以及 <b><i>实验方面的信息</i></b>。</p>
+
+<p style="text-indent:2em">RFC 文档通过编号组织每个协议的标准化请求。例如 IP 协议的规范由 RFC279 制定，TCP 协议的规范由RFC793 号文档决定。RFC 的编码是既定的，旦成为某一 RFC 的内容，就不能再对其进行随意修改。若要扩展已有某个协议规范的内容，一定要有一个全新编号的 RFC 文档对其进行记录。若要修改已有某个协议规范内容，则需要重新发行一个新的 RFC 文档，同时，老的那份 RFC 作废。新的 RFC 文档会明确规定是扩展了哪个已有的 RFC 以及要作废哪个已有 RFC。</p>
+
+<p style="text-indent:2em">此时，有人提出每当对 RFC 进行修改时都要产生新的 RFC 编号太麻烦。为此，人们采用 STD(Standard) 方式管理编号。STD 用来记载哪个编号制定哪个协议。因此，同一个协议的规范内容即便发生了变化也不会导致 STD 编号发生变化。</p>
+
+<p style="text-indent:2em">今后，即使协议规范的内容改变也不会改变 STD 编号，但是有可能导致某个 STD 下的 RFC 编号视情况有所增减。</p>
+
+<p style="text-indent:2em">此外，为了向互联网用户和管理者提供更有益的信息，与 STD 类似，FYI(For Your Information) 也开始标注编号组织。FYI 为了人们方便检索，也在其每个编号里涵盖了所涉及的 RFC 编号。即使更新内容，编号也不会发生变化。</p>
+
+<p style="text-indent:2em">STD1 记录着所有要求协议标准化的 RFC 状态。到 2012 年 1 月为止，STD1 相当于 RFC5000（很多情况下会采用比较容易记忆的编号）。</p>
+
+<table>
+<thead align="center">
+  <tr>
+    <th>协议</th>
+    <th>STD</th>
+    <th>RFC</th>
+    <th>状态</th>
+  </tr>
+</thead>
+<tbody align="center">
+  <tr>
+    <td>IP（v4）</td>
+    <td>STD5</td>
+    <td>RFC791、RFC919、RFC922</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>IP（v6）</td>
+    <td></td>
+    <td>RFC2460</td>
+    <td>草案标准</td>
+  </tr>
+  <tr>
+    <td>ICMP</td>
+    <td>STD5</td>
+    <td>RDC792、RFC950</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>ICMPv6</td>
+    <td></td>
+    <td>RFC4443</td>
+    <td>草案标准</td>
+  </tr>
+  <tr>
+    <td><b><i>ND for IPv6</i></b></td>
+    <td></td>
+    <td>RFC4861</td>
+    <td>草案标准</td>
+  </tr>
+  <tr>
+    <td>ARP</td>
+    <td>STD37</td>
+    <td>RFC826</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>RARP</td>
+    <td>STD38</td>
+    <td>RFC903</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>TCP</td>
+    <td>STD7</td>
+    <td>RFC793、RFC3168</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>UDP</td>
+    <td>STD6</td>
+    <td>RFC768</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>IGMP（v3）</td>
+    <td></td>
+    <td>RFC3376</td>
+    <td>提议标准</td>
+  </tr>
+  <tr>
+    <td>DNS</td>
+    <td>STD13</td>
+    <td>RFC1034、RFC1035</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>DHCP</td>
+    <td></td>
+    <td>RFC2131、RFC2132、RFC3315</td>
+    <td>草案标准</td>
+  </tr>
+  <tr>
+    <td>HTTP（v1.1）</td>
+    <td></td>
+    <td>RFC2616</td>
+    <td>草案标准</td>
+  </tr>
+  <tr>
+    <td rowspan="2">SMTP</td>
+    <td></td>
+    <td>RFC5321</td>
+    <td>草案标准</td>
+  </tr>
+  <tr>
+    <td>STD10</td>
+    <td>RFC821、RFC1869、RFC1870</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>POP（v3）</td>
+    <td>STD53</td>
+    <td>RFC1939</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>FTP</td>
+    <td>STD9</td>
+    <td>RFC959、RFC2228</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>TELNET</td>
+    <td>STD8</td>
+    <td>RFC854、RFC855</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>SNMP</td>
+    <td>STD15</td>
+    <td>RFC1157</td>
+    <td>历史性</td>
+  </tr>
+  <tr>
+    <td>SNMP（v3）</td>
+    <td>STD62</td>
+    <td>RFC3411、RFC3418</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>MIB-Ⅱ</td>
+    <td>STD17</td>
+    <td>RFC1213</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>RMON</td>
+    <td>STD59</td>
+    <td>RFC2819</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>RIP（v2）</td>
+    <td>STD34</td>
+    <td>RFC1058</td>
+    <td>历史性</td>
+  </tr>
+  <tr>
+    <td>RIP（v2）</td>
+    <td>STD56</td>
+    <td>RFC2453</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>OSPF（v2）</td>
+    <td>STD54</td>
+    <td>RFC2328</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>EGP</td>
+    <td>STD18</td>
+    <td>RFC904</td>
+    <td>历史性</td>
+  </tr>
+  <tr>
+    <td>BGP（v4）</td>
+    <td></td>
+    <td>RFC4271</td>
+    <td>草案标准</td>
+  </tr>
+  <tr>
+    <td>PPP</td>
+    <td>STD51</td>
+    <td>RFC1661、RFC1662</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>PPPoE</td>
+    <td></td>
+    <td>RFC2516</td>
+    <td>信息性</td>
+  </tr>
+  <tr>
+    <td>MPLS</td>
+    <td></td>
+    <td>RFC3031</td>
+    <td>提议标准</td>
+  </tr>
+  <tr>
+    <td>RTP</td>
+    <td>STD64</td>
+    <td>RFC3550</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>主机实现要求</td>
+    <td>STD3</td>
+    <td>RFC1122、RFC1123</td>
+    <td>标准</td>
+  </tr>
+  <tr>
+    <td>路由器实现要求</td>
+    <td></td>
+    <td>RFC1812、RFC2644</td>
+    <td>提议标准</td>
+  </tr>
+</tbody>
+</table>
+
+<center>--- 表 2.2 --- 具有代表性的 RFC（ 2012 年 1 月为止）</center>
+
+<center>每个 RFC 的最新信息请参考http://www.rfc-editor.org/rfc/rfc××××.txt(其中××××为RFC
+编号)。</center>
+
+<hr>
+<p style="text-indent:2em"><b><i>新的 RFC 与旧的 RFC：</i></b></p>
+
+<p style="text-indent:2em">下面，以第4章要介绍的 ICMP 为例来介绍一下 RFC 的变迁过程。</p>
+
+<p style="text-indent:2em">ICMP 是由 RFC792 定义、由 RFC950 扩展的。也就是说，ICMP 是由这两个 RFC 文档组合起来构成其详细的规范内容。RFC792 本身废除了以前的 RFC777。而 RFC1256 虽然还未正式成为标准，但目前（到 2012 年 2 月为止)已处于提议标准阶段。</p>
+
+<p style="text-indent:2em">主机和路由器处理 ICMP 时所涉及的要求细节也写入了 RFC，分别为 <b><i>RFC1122 和 RFC1812</i></b>。</p>
+
+<hr>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>RFC(Request For Comment) ：RFC从字面意义上看就是指征求意见表，属于一种征求协议相关意见的文档。</p>
+<p>协议的实现和运用的相关信息 ：协议实现或运用相关的信息叫做 FYI (For Your Informa-tion)。</p>
+<p>实验方面的信息 ：实验阶段的协议称作 Experimental。</p>
+<p>ND for IPv6 ：Neighbor Discovery Protocol for Internet Protocol Version 6</p>
+<p>RFC1122 和 RFC1812 ：RFC1122 与 RFC1812 中不仅记载了对 ICMP 的处理要求，还记载了主机和路由器对 IP、TCP 以及 ARP 等众多协议在实现上的要求。</p>
+<hr>
+<h3 id="—-2-2-4-—TCP-x2F-IP-的标准化流程"><a href="#—-2-2-4-—TCP-x2F-IP-的标准化流程" class="headerlink" title="— 2.2.4 —	TCP&#x2F; IP 的标准化流程"></a>— 2.2.4 —	TCP&#x2F; IP 的标准化流程</h3><p style="text-indent:2em">一个协议的标准化一定要经过 IETF 讨论。IETF 虽然每年只组织3次会议，但是日常都会通过邮件组的形式进行讨论，并且该邮件组不限制订阅。</p>
+
+<p style="text-indent:2em">TCP/IP 协议的标准化流程大致分为以下几个阶段：首先是互联网草案阶段；其次，如果认为可以进行标准化，就记入 RFC 进入提议标准阶段；第三，是草案标准阶段；最后，才进入真正的标准阶段。</p>
+
+<p style="text-indent:2em">如果仔细分析这些阶段，不难发现在协议真正被标准化之前会有一个提议阶段。正是在这一阶段，那些想要对协议提出建议和意见的个人或组织会撰写文档，将内容作为草案发布在互联网上，而讨论也将基于这些文档内容通过邮件进行，从而也可以进行相应的设备实现、模拟以及应用实验。</p>
+
+<p style="text-indent:2em">互联网草案的有效期通常为6个月。也就是说，只要进入讨论流程，就必须在6个月内将所讨论的结果反映到的草案，否则将以长时间无任何进展为由自动消除。这也是为了防止一些没有实质意义和实际讨论内容的草案出现。在这个全世界信息泛滥的时代，TCP/IP 的草案也是漫天横飞。因此，去伪存真是非常重要的。</p>
+
+<p style="text-indent:2em">经过充分的讨论，如果得到 IESG(IETF Engineering Steering Group,由 IETF 的主要成员组成)的批准，就能被编入 RFC 文档。这个文档叫做提议标准（Poposed Standard）。</p>
+
+<p style="text-indent:2em">提议标准中所提出的协议将被众多设备应用。如果能够得到 IESG 的认可，就可以成为草案标准（Draft Standard）。而如果在实际应用当中遇到问题，则可在成为草案标准前进行修订。当然，这种修订也是通过互联网草案的形式发布的。</p>
+
+<p style="text-indent:2em">要从草案标准达到真正的标准，还需要更多的设备实现并应用这个特定的协议。若所有参与该协议制定的人都觉得它“实用性强，没有什么问题”，并得到 IESG 的最终批准，那么这个草案标准就可以成为标准。</p>
+
+<p style="text-indent:2em">因此标准化的过程是漫长而有风险的。如果未在互联网上被广泛使用，就无法最终成为一个提案标准。TCP/IP 的标准化过程与一般的标准化过程不同。它不是由标准化组织制定为标准以后才开始投入应用，而是到其成为标准的那一刻为止，<b><i>已经被较为充分地试验并得到了较广的普及</i></b>。那些已经成为标准的 TCP/IP 协议其实早已被人们广泛应用，因此，具有很强的实用性。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304161529974.png" alt="image-20230416152905930"></p>
+<center>--- 图 2.4 --- 协议的标准化流程</center>
+
+<hr>
+<p style="text-indent:2em"><b><i>提议标准与草案标准的实现：</i></b></p>
+
+<p style="text-indent:2em">很多情况下，向市场推广一些只实现了 RFC 中标准协议的产品显然不够，因为只有被广泛使用之后才能成为标准。</p>
+
+<p style="text-indent:2em">因此从前瞻性考虑，应该实现那些草案协议和提议协议，这样才可能有机会抢先市场。并且，当规范经过修订以后，设备厂商也应该提供升级等方式将其迅速反映到产品当中。</p>
+
+<hr>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>已经被较为充分地试验并得到了较广的普及 ：有些协议不是以标准化为目的，而只是实验性质的。这种协议在 RFC 中被称作实验性协议（Experimental）。</p>
+<hr>
+<h3 id="—-2-2-5-—RFC-的获取方法"><a href="#—-2-2-5-—RFC-的获取方法" class="headerlink" title="— 2.2.5 —	RFC 的获取方法"></a>— 2.2.5 —	RFC 的获取方法</h3><p style="text-indent:2em">获取 RFC 可以有几种方法。最直接的方法就是利用互联网查询“RFC Editor”（所有的 RFC 都在“RFC Editor”中管理）。具体网址为：</p>
+
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.rfc-editor.org/rfc/">http://www.rfc-editor.org/rfc/</a></li>
+<li><a href="ftp://ftp.rfc-editor.org/in-notes/">ftp://ftp.rfc-editor.org/in-notes/</a></li>
+</ul>
+<p style="text-indent:2em">上面两个网址保存着所有 RFC 文件，网站中有一个名为 rfc-index.xt 的文件包含了所有 RFC 的概览。RFC 网站除了发布 RFC 的相关信息，还提供 RFC 检索功能。此外，在日本国内的某些 <b><i>anonymous ftp服务器</i></b>（如 JPNIC 的 ftp服务器，ftp://ftp.nic.ad.jp/rfc/）上也存有 RFC 信息。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>如何获取 STD 或 FYI 以及 ID：</i></b></p>
+
+<p style="text-indent:2em">STD、FYI、ID(I-D:Internet Draft)号可以从以下网站获取。关于它们的概览也分别记录在std-index.txt、fyi-index.txt等文件中。因此可以先从这些网站搜索对应的编号。</p>
+
+<ul>
+<li>STD获取网址 ：<ul>
+<li><a target="_blank" rel="noopener" href="http://www.rfc-editor.org/in-notes/std/">http://www.rfc-editor.org/in-notes/std/</a></li>
+</ul>
+</li>
+<li>FYI获取网址 ：<ul>
+<li><a target="_blank" rel="noopener" href="http://www.rfc-editor.org/in-notes/fyi/">http://www.rfc-editor.org/in-notes/fyi/</a></li>
+</ul>
+</li>
+<li>ID获取网址 ：<ul>
+<li><a target="_blank" rel="noopener" href="http://www.rfc-editor.org/internet-drafts/">http://www.rfc-editor.org/internet-drafts/</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>anonymous ftp服务器 ：互联网上有很多这样的 ftp 服务器。它的特点是可以由任何人用置名用户访问。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WangHao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/04/15/tujietcpip-studynotes-10/">http://example.com/2023/04/15/tujietcpip-studynotes-10/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">归途</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><a class="post-meta__tags" href="/tags/%E3%80%8A%E5%9B%BE%E8%A7%A3TCP-IP%E3%80%8B/">《图解TCP/IP》</a></div><div class="post_share"><div class="social-share" data-image="https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/04/15/English-Day9/" title="English-Day9"><img class="cover" src="https://pic2.zhimg.com/80/v2-e22aaad20d20634f506f57fff0fcbc17_1440w.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">English-Day9</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/14/English-Day8/" title="English-Day8"><img class="cover" src="https://pic3.zhimg.com/80/v2-7cfc909ebe8d83683909846edd6b5232_1440w.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">English-Day8</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/04/06/tujietcpip-studynotes-1/" title="《图解TCP&#x2F;IP》学习记录（1）"><img class="cover" src="https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-06</div><div class="title">《图解TCP&#x2F;IP》学习记录（1）</div></div></a></div><div><a href="/2023/04/07/tujietcpip-studynotes-2/" title="《图解TCP&#x2F;IP》学习记录（2）"><img class="cover" src="https://pic3.zhimg.com/80/v2-e5c15010b8ba4608a1974403a02a2da0_1440w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-07</div><div class="title">《图解TCP&#x2F;IP》学习记录（2）</div></div></a></div><div><a href="/2023/04/08/tujietcpip-studynotes-3/" title="《图解TCP&#x2F;IP》学习记录（3）"><img class="cover" src="https://pic2.zhimg.com/80/v2-63bbdb5b76b8d349ad35ff4281efbd37_1440w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-08</div><div class="title">《图解TCP&#x2F;IP》学习记录（3）</div></div></a></div><div><a href="/2023/04/09/tujietcpip-studynotes-4/" title="《图解TCP&#x2F;IP》学习记录（4）"><img class="cover" src="https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-09</div><div class="title">《图解TCP&#x2F;IP》学习记录（4）</div></div></a></div><div><a href="/2023/04/10/tujietcpip-studynotes-5/" title="《图解TCP&#x2F;IP》学习记录（5）"><img class="cover" src="https://pic3.zhimg.com/v2-a5267dfbf175991d4b3a69b41f3f678a_b.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-10</div><div class="title">《图解TCP&#x2F;IP》学习记录（5）</div></div></a></div><div><a href="/2023/04/12/tujietcpip-studynotes-7/" title="《图解TCP&#x2F;IP》学习记录（7）"><img class="cover" src="https://pic3.zhimg.com/v2-a5267dfbf175991d4b3a69b41f3f678a_b.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-12</div><div class="title">《图解TCP&#x2F;IP》学习记录（7）</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304092347441.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">WangHao</div><div class="author-info__description">Welcome to WangHao's blog</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WH-wanghao/WH-wanghao.github.io"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/WH-wanghao" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2025450495@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2025450495&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC2%E7%AB%A0%E3%80%81TCP-x2F-IP-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">第2章、TCP &#x2F; IP 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#x3D-x3D-x3D-2-1-x3D-x3D-x3D-TCP-x2F-IP-%E5%87%BA%E7%8E%B0%E7%9A%84%E8%83%8C%E6%99%AF%E5%8F%8A%E5%85%B6%E5%8E%86%E5%8F%B2"><span class="toc-number">1.1.</span> <span class="toc-text">&#x3D;&#x3D;&#x3D; 2.1 &#x3D;&#x3D;&#x3D;	TCP &#x2F; IP 出现的背景及其历史</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%94-2-1-1-%E2%80%94%E4%BB%8E%E5%86%9B%E7%94%A8%E6%8A%80%E6%9C%AF%E7%9A%84%E5%BA%94%E7%94%A8%E8%B0%88%E8%B5%B7"><span class="toc-number">1.1.1.</span> <span class="toc-text">— 2.1.1 —	从军用技术的应用谈起</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%94-2-1-2-%E2%80%94-ARPANET-%E7%9A%84%E8%AF%9E%E7%94%9F"><span class="toc-number">1.1.2.</span> <span class="toc-text">— 2.1.2 — 	ARPANET  的诞生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%94-2-1-3-%E2%80%94TCP-x2F-IP-%E7%9A%84%E8%AF%9E%E7%94%9F"><span class="toc-number">1.1.3.</span> <span class="toc-text">— 2.1.3 —	TCP &#x2F; IP 的诞生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%94-2-1-4-%E2%80%94UNIX-%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%99%AE%E5%8F%8A%E4%B8%8E%E4%BA%92%E8%81%94%E7%BD%91%E7%9A%84%E6%89%A9%E5%BC%A0"><span class="toc-number">1.1.4.</span> <span class="toc-text">— 2.1.4 —	UNIX 系统的普及与互联网的扩张</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%94-2-1-5-%E2%80%94%E5%95%86%E7%94%A8%E4%BA%92%E8%81%94%E7%BD%91%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%90%AF%E8%92%99"><span class="toc-number">1.1.5.</span> <span class="toc-text">— 2.1.5 —	商用互联网服务的启蒙</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#x3D-x3D-x3D-2-2-x3D-x3D-x3D-TCP-x2F-IP-%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96"><span class="toc-number">1.2.</span> <span class="toc-text">&#x3D;&#x3D;&#x3D; 2.2 &#x3D;&#x3D;&#x3D; 	TCP &#x2F; IP 的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%94-2-2-1-%E2%80%94TCP-x2F-IP-%E7%9A%84%E5%85%B7%E4%BD%93%E5%90%AB%E4%B9%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">— 2.2.1 —	TCP &#x2F; IP 的具体含义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%94-2-2-2-%E2%80%94-TCP-x2F-IP-%E6%A0%87%E5%87%86%E5%8C%96%E7%B2%BE%E9%AB%93"><span class="toc-number">1.2.2.</span> <span class="toc-text">— 2.2.2 — 	TCP &#x2F; IP 标准化精髓</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%94-2-2-3-%E2%80%94TCP-x2F-IP-%E8%A7%84%E8%8C%83%E2%80%94%E2%80%94-RFC"><span class="toc-number">1.2.3.</span> <span class="toc-text">— 2.2.3 —	TCP &#x2F; IP 规范—— RFC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%94-2-2-4-%E2%80%94TCP-x2F-IP-%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.4.</span> <span class="toc-text">— 2.2.4 —	TCP&#x2F; IP 的标准化流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%94-2-2-5-%E2%80%94RFC-%E7%9A%84%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.5.</span> <span class="toc-text">— 2.2.5 —	RFC 的获取方法</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/04/15/English-Day9/" title="English-Day9"><img src="https://pic2.zhimg.com/80/v2-e22aaad20d20634f506f57fff0fcbc17_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="English-Day9"/></a><div class="content"><a class="title" href="/2023/04/15/English-Day9/" title="English-Day9">English-Day9</a><time datetime="2023-04-15T15:37:01.000Z" title="发表于 2023-04-15 23:37:01">2023-04-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/15/tujietcpip-studynotes-10/" title="《图解TCP/IP》学习记录（10）"><img src="https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《图解TCP/IP》学习记录（10）"/></a><div class="content"><a class="title" href="/2023/04/15/tujietcpip-studynotes-10/" title="《图解TCP/IP》学习记录（10）">《图解TCP/IP》学习记录（10）</a><time datetime="2023-04-15T10:19:21.000Z" title="发表于 2023-04-15 18:19:21">2023-04-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/14/English-Day8/" title="English-Day8"><img src="https://pic3.zhimg.com/80/v2-7cfc909ebe8d83683909846edd6b5232_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="English-Day8"/></a><div class="content"><a class="title" href="/2023/04/14/English-Day8/" title="English-Day8">English-Day8</a><time datetime="2023-04-14T15:41:34.000Z" title="发表于 2023-04-14 23:41:34">2023-04-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/14/tujietcpip-studynotes-9/" title="《图解TCP/IP》学习记录（9）"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《图解TCP/IP》学习记录（9）"/></a><div class="content"><a class="title" href="/2023/04/14/tujietcpip-studynotes-9/" title="《图解TCP/IP》学习记录（9）">《图解TCP/IP》学习记录（9）</a><time datetime="2023-04-14T08:37:24.000Z" title="发表于 2023-04-14 16:37:24">2023-04-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/13/English-Day7/" title="English-Day7"><img src="https://picx.zhimg.com/80/v2-85c31120acff76826ab53ea8934ef4bb_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="English-Day7"/></a><div class="content"><a class="title" href="/2023/04/13/English-Day7/" title="English-Day7">English-Day7</a><time datetime="2023-04-13T11:50:24.000Z" title="发表于 2023-04-13 19:50:24">2023-04-13</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By WangHao</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="8281432682" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-loop="all" data-order="random"> </div><script async src="/js/title.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,YOU" data-fontsize="15px" data-random="false" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></body></html>
