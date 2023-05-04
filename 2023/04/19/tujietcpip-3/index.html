@@ -1,0 +1,865 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>《图解TCP/IP》（3） | 归途</title><meta name="author" content="WangHao"><meta name="copyright" content="WangHao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="第3章、数据链路	3.1	数据链路的作用数据链路，指 OSI 参考模型中的数据链路层，有时也指以太网、无线局域网等通信手段。  TCP&#x2F;IP 中对于 OSI 参考模型的数据链路层及以下部分（物理层）未作定义。因为 TCP&#x2F;IP 以这两层的功能是透明的为前提。然而，数据链路的知识对于深入理解 TCP&#x2F;IP 与网络起着至关重要的作用。  数据链路层的协议定义了通过通信媒介互连的设备之间传输的规范。通信">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《图解TCP&#x2F;IP》（3）">
+<meta property="og:url" content="http://example.com/2023/04/19/tujietcpip-3/index.html">
+<meta property="og:site_name" content="归途">
+<meta property="og:description" content="第3章、数据链路	3.1	数据链路的作用数据链路，指 OSI 参考模型中的数据链路层，有时也指以太网、无线局域网等通信手段。  TCP&#x2F;IP 中对于 OSI 参考模型的数据链路层及以下部分（物理层）未作定义。因为 TCP&#x2F;IP 以这两层的功能是透明的为前提。然而，数据链路的知识对于深入理解 TCP&#x2F;IP 与网络起着至关重要的作用。  数据链路层的协议定义了通过通信媒介互连的设备之间传输的规范。通信">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-e22aaad20d20634f506f57fff0fcbc17_1440w.webp">
+<meta property="article:published_time" content="2023-04-19T12:28:06.000Z">
+<meta property="article:modified_time" content="2023-04-28T07:38:21.445Z">
+<meta property="article:author" content="WangHao">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="《图解TCP&#x2F;IP》">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-e22aaad20d20634f506f57fff0fcbc17_1440w.webp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/04/19/tujietcpip-3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: WangHao","link":"链接: ","source":"来源: 归途","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '《图解TCP/IP》（3）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2023-04-28 15:38:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/transpancy.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304092347441.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://pic2.zhimg.com/80/v2-e22aaad20d20634f506f57fff0fcbc17_1440w.webp')"><nav id="nav"><span id="blog-info"><a href="/" title="归途"><span class="site-name">归途</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">《图解TCP/IP》（3）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-19T12:28:06.000Z" title="发表于 2023-04-19 20:28:06">2023-04-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-28T07:38:21.445Z" title="更新于 2023-04-28 15:38:21">2023-04-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E3%80%8A%E5%9B%BE%E8%A7%A3TCP-IP%E3%80%8B%EF%BC%88%E7%AC%AC%E4%BA%94%E7%89%88%EF%BC%89/">《图解TCP/IP》（第五版）</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="《图解TCP/IP》（3）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="第3章、数据链路"><a href="#第3章、数据链路" class="headerlink" title="第3章、数据链路	"></a><center>第3章、数据链路	</center></h1><h2 id="3-1数据链路的作用"><a href="#3-1数据链路的作用" class="headerlink" title="3.1	数据链路的作用"></a><center>3.1	数据链路的作用</center></h2><p style="text-indent:2em">数据链路，指 OSI 参考模型中的数据链路层，有时也指以太网、无线局域网等通信手段。</p>
+
+<p style="text-indent:2em">TCP/IP 中对于 OSI 参考模型的数据链路层及以下部分（物理层）未作定义。因为 TCP/IP 以这两层的功能是透明的为前提。然而，数据链路的知识对于深入理解 TCP/IP 与网络起着至关重要的作用。</p>
+
+<p style="text-indent:2em">数据链路层的协议定义了通过通信媒介互连的设备之间传输的规范。通信媒介包括双绞线电缆、同轴电缆、光纤、电波以及红外线等介质。此外，各个设备之间有时也会通过交换机、网桥、中继器等中转数据。</p>
+
+<p style="text-indent:2em">实际上，各个设备之间在数据传输时，数据链路层和物理层都是必不可少的。众所周知，计算机以二进制0、1来表示信息，然而实际的通信媒介之间处理的却是电压的高低、光的闪灭以及电波的强弱等信号。把这些信号与二进制的0、1进行转换正是物理层（参考附录3）的责任。数据链路层处理的数据也不是单纯的0、1序列，该层把它们集合为一个叫做“帧”的块，然后再进行传输。</p>
+
+<p style="text-indent:2em">本章旨在介绍 OSI 参考模型中数据链路层的相关技术，包括 MAC 寻址（物理寻址）、介质共享、非公有网络、分组交换、环路检测、VLAN（Virtual Local Area Network,虚拟局域网）等。本章也会涉及作为传输方式的数据链路，如以太网、WLAN（Wireless Local Area Network,无限局域网）、PPP（Point to Point Protocol,点对点协议）等概念。数据链路也可以被视为网络传输中的最小单位。其实，仔细观察连通全世界的互联网就可以发现，它也不外乎是由众多这样的数据链路组成的，因此又可以称互联网为“数据链路的集合”。</p>
+
+<p style="text-indent:2em">在以太网与 FDDI（Fiber Distributed Data Interface,光纤分布式数据接口）的规范中，不仅包含 OSI 参考模型的第2层数据链路层，也规定了第1层物理层的规格。而在ATM（Asynchronous Transfer Mode,异步传输方式）的规范中，还包含了第3层网络层的一部分功能。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192110057.png" alt="image-20230419211044976"></p>
+<center>--- 图 3.1 --- 数据链路</center>
+
+<hr>
+<p style="text-indent:2em"><b><i>数据链路的段：</i></b></p>
+
+<p style="text-indent:2em">数据链路的段是指一个被分割的网络。然而根据使用者不同，其含义也不尽相同。例如，引入中继器将两条网线相连组成一个网络。</p>
+
+<p style="text-indent:2em">这种情况下有两条数据链路：</p>
+
+<ul>
+<li>从网络层的概念看，它是一个网络（逻辑上) → 即，从网络层的立场出发，这两条网线组成一个段。</li>
+<li>从物理层的概念看，两条网线分别是两个物体（物理上）→ 即，从物理层的观点出发，一条网线是一个段。</li>
+</ul>
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192119033.png" alt="image-20230419211944985"></p>
+<center>--- 图 3.2 --- 段的范围</center>
+
+<hr>
+<hr>
+<p style="text-indent:2em"><b><i>网络拓扑：</i></b></p>
+
+<p style="text-indent:2em">网络的连接和构成的形态称为网络拓扑（Topology）。网络拓扑包括总线型、环型、星型、网状型等。拓扑一词不仅用于直观可见的配线方式上，也用于逻辑上网络的组成结构。两者有时可能会不一致。图 3.3 展示了配线上的拓扑结构。而目前实际的网络都是由这些简单的拓扑结构错综复杂地组合而成的。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192125296.png" alt="image-20230419212512260"></p>
+<center>--- 图 3.3 --- 总线型、环形、星型、网状型</center>
+
+<hr>
+<hr>
+<h2 id="3-2数据链路相关技术"><a href="#3-2数据链路相关技术" class="headerlink" title="3.2	数据链路相关技术"></a><center>3.2	数据链路相关技术</center></h2><h3 id="3-2-1MAC-地址"><a href="#3-2-1MAC-地址" class="headerlink" title="3.2.1	MAC 地址"></a>3.2.1	MAC 地址</h3><p style="text-indent:2em">MAC 地址用于识别数据链路中互连的节点（如图3.4）。以太网或 FDDI 中，根据 <b><i>IEEE802.3</i></b> 的规范使用 MAC 地址。其他诸如无线 LAN（IEEE802.11a/b/g/n等）、蓝牙等设备中也是用相同规格的 MAC 地址。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192135282.png" alt="image-20230419213512233"></p>
+<center>--- 图 3.4 --- 通过 MAC 地址判断目标地址</center>
+
+<p style="text-indent:2em">MAC 地址长 48 比特，结构如图3.5所示。在使用网卡（NIC）的情况下，MAC 地址一般会被烧入到 ROM 中。因此，任何一个网卡的 MAC 地址都是唯一的，在全世界都不会有重复（也有例外，具体请参考后页注解）。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192153719.png" alt="image-20230419215324675"></p>
+<center>--- 图 3.5 --- IEEE802.3 规范的 MAC 地址格式</center>
+
+<p style="text-indent:2em">MAC 地址中 3~24 位（比特位）表示厂商识别码，每个 NIC 厂商都有特定唯一的识别数字。25~48 位是厂商内部为识别每个网卡而用。因此，可以保证全世界不会有相同 MAC 地址的网卡。</p>
+
+<p style="text-indent:2em">IEEE802.3 制定 MAC 地址规范时没有限定数据链路的类型，即不论哪种数据链路的网络（以太网、FDDI、ATM、无线 LAN、蓝牙等），都不会有相同的 MAC 地址出现。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>例外情况—— MAC 地址不一定是唯一的：</i></b></p>
+
+<p style="text-indent:2em">在全世界，MAC 地址也并不总是唯一的。实际上，即使 MAC 地址相同，只要不是同属一个数据链路就不会出现问题。</p>
+
+<p style="text-indent:2em">例如，人们可以在微机板上自由设置自己的 MAC 地址。再例如，一台主机上如果启动多个虚拟机，由于没有硬件的网卡只能由虚拟软件自己设定 MAC 地址给多个虚拟网卡，这时就很难保证所生成的 MAC 地址是独一无二的了。</p>
+
+<p style="text-indent:2em">但是，无论哪个协议成员通信设备，设计前提都是 MAC 地址的唯一性。这也可以说是网络世界的基本准则。</p>
+
+<hr>
+<hr>
+<p style="text-indent:2em"><b><i>厂商识别码：</i></b></p>
+
+<p style="text-indent:2em">有一种设备叫网络分析器。它可以分析出局域网中的包是由哪个厂商的网卡发出的。它通过读取数据顿当中发送 MAC 地址里的厂商识别码进行识别。由于能够迅速定位是否有未知厂商识别码的网卡发送异常的包，这一功能在由多个厂商的设备构成的网络环境中，对于分析问题极为有效。</p>
+
+<p style="text-indent:2em">厂商识别码官方的叫法是 OUI（Organizationally Unique Ideifier）。由于最近网络设备厂商的收购与合并，OUI 的数据库和实际厂商名字也出现了不一致的情况。OUI 信息一般都会公开在以下网站上：</p>
+
+<p style="text-indent:2em">http://standards.ieee.org/develop/regauth/oui/public.html</p>
+
+<p style="text-indent:2em">此外，MAC 地址的分配，通过以下站点申请（收费）：</p>
+
+<p style="text-indent:2em">http://standards.ieee.org/develop/regauth/oui/index.html</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>IEEE802.3 ：IEEE 指的是美国电气和电子工程师协会，也叫”i triple E”。IEEE802 是制定局域网标准化相关规范的组织。其中IEEE802.3是关于以太网（CSMA&#x2F;CD）的国际规范。</p>
+<hr>
+<h3 id="3-2-2共享介质型网络"><a href="#3-2-2共享介质型网络" class="headerlink" title="3.2.2	共享介质型网络"></a>3.2.2	共享介质型网络</h3><p style="text-indent:2em">从通信介质（通信，介质）的使用方法上看，网络可分为共享介质型和非共享介质型。</p>
+
+<p style="text-indent:2em">共享介质型网络指由多个设备共享一个通信介质的一种网络。最早的以太网和 FDDI 就是介质共享型网络。在这种方式下，设备之间使用同一个载波信道进行发送和接收。为此，基本上采用半双工通信（参考3.2.3节后面的详解）方式，并有必要对介质进行访问控制。</p>
+
+<p style="text-indent:2em">共享介质型网络中有两种介质访问控制方式：一种是争用方式，另一种是令牌传递方式。</p>
+
+
+
+<p style="text-indent:2em"><b><i>争用方式：</i></b></p>
+
+<p style="text-indent:2em">争用方式（Contention）是指争夺获取数据传输的权力，也叫 CSMA（载波监听多路访问）。这种方法通常令网络中的各个 <b><i>站</i></b> 采用先到先得的方式占用信道发送数据，如果多个站同时发送帧，则会产生冲突现象。也因此会导致网络拥堵与性能下降。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192229802.png" alt="image-20230419222927752"></p>
+<center>--- 图 3.6 --- 争用方式</center>
+
+<p style="text-indent:2em">在一部分以太网当中，采用了改良 CSMA 的另一种方式—— <b><i>CSMA/CD</i></b> 方式。CSMA/CD 要求每个站提前检查冲突，一旦发生冲突，则尽早释放信道。其具体工作原理如下：</p>
+
+<ul>
+<li>如果载波信道上没有数据流动，则任何站都可以发送数据。</li>
+<li>检查是否会发生冲突。一旦发生冲突时，<b><i>放弃发送数据</i></b>，同时立即释放载波信道。</li>
+<li>放弃发送以后，随机延时一段时间，再重新争用介质，重新发送帧。</li>
+</ul>
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192234977.png" alt="image-20230419223433918"></p>
+<center>--- 图 3.7 --- CSMA/CD 方式</center>
+
+ 
+
+<p style="text-indent:2em"><b><i>令牌传递方式：</i></b></p>
+
+<p style="text-indent:2em">令牌传递方式是沿着令牌环发送一种叫做“令牌”的特殊报文，是控制传输的一种方式。只有获得令牌的站才能发送数据。这种方式有两个特点：一是不会有冲突，二是每个站都有通过平等循环获得令牌的机会。因此，即使网络拥堵也不会导致性能下降。</p>
+
+<p style="text-indent:2em">当然，这种方式中，一个站在没有收到令牌前不能发送数据帧，因此在网络不太拥堵的情况下数据链路的利用率也就达不到100%。为此，衍生了多种令牌传递的技术。例如，早期令牌释放、<b><i>令牌追加</i></b> 等方式以及多个令牌同时循环等方式。这些方式的目的都是为了尽可能地提高网络性能。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192246248.png" alt="image-20230419224623181"></p>
+<center>--- 图 3.8 --- 令牌传递方式</center>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>站 ：数据链路中很多情况下称节点为“站”。</p>
+<p>CSMA&#x2F;CD ：Carrier Sense Multiple Access with Collision Detection.</p>
+<p>放弃发送数据 ：实际上会发送一个32位特别的信号，在阻塞报文以后再停止发送。接收端通过发生冲突时帧的 FCS (参考3.3.4<br>节)，判断出该帧不正确从而丢弃帧。</p>
+<p>令牌追加 ：不等待接收方的数据到达确认就将令牌发送给下一个站。</p>
+<hr>
+<h3 id="3-2-3非介质共享网络"><a href="#3-2-3非介质共享网络" class="headerlink" title="3.2.3	非介质共享网络"></a>3.2.3	非介质共享网络</h3><p style="text-indent:2em">非共享介质网络是指不共享介质，是对介质采取专用的一种传输控制方式。在这种方式下，网络中的每个站直连交换机，由交换机负责转发数据帧。此方式下，发送端与接收端并不共享通信介质，因此很多情况下采用全双工通信方式（具体请参考本节最后的详解）。</p>
+
+<p style="text-indent:2em">不仅 ATM 采用这种传输控制方式，最近它也成为了以太网的主流方式。通过以太网交换机构建网络，从而使计算机与交换机端口之间形成一对一的连接，即可实现全双工通信。在这种一对一连接全双工通信的方式下不会发生冲突，因此不需要 CSMA/CD 的机制就可以实现更高效的通信。</p>
+
+<p style="text-indent:2em">该方式还可以根据交换机的高级特性构建虚拟局域网（VLAN,Virtual LAN）、进行流量控制等。当然，这种方式也有一个致命的弱点，那就是一旦交换机发生故障，与之相连的所有计算机之间都将无法通信。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192256013.png" alt="image-20230419225640961"></p>
+<center>--- 图 3.9 --- 非共享介质型网络</center>
+
+<hr>
+<p style="text-indent:2em"><b><i>全双工与半双工通信 ：</i></b></p>
+
+<p style="text-indent:2em">半双工是指，只发送或只接收的通信方式。它类似于无线电收发器，若两端同时说话，是听不见对方说的话的。而全双工不同，它允许在同一时间既可以发送数据也可以接收数据。类似于电话，接打双方可以同时说话。</p>
+
+<p style="text-indent:2em">采用 CSMA/CD 方式的以太网，如图 3.7 所示，首先要判断是否可以通信，如果可以就独占通信介质发送数据。因此，它像无线电收发器一样，不能同时接收和发送数据。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192301692.png" alt="image-20230419230126635"></p>
+<center>--- 图 3.10 --- 半双工通信</center>
+
+<p style="text-indent:2em">同样是以太网，在使用交换机与双绞线电缆（亦或光纤电缆）的情况下，既可以通过交换机的端口与计算机之间进行一对一的连接，也可以通过 <b><i>相连电缆内部的收发线路</i></b> 分别进行接收和发送数据。因此，交换机的端口与计算机之间可以实现同时收发的全双工通信。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192303819.png" alt="image-20230419230349744"></p>
+<center>--- 图 3.11 --- 全双工通信</center>
+
+<hr>
+<hr>
+<h3 id="3-2-4根据-MAC-地址转发"><a href="#3-2-4根据-MAC-地址转发" class="headerlink" title="3.2.4	根据 MAC 地址转发"></a>3.2.4	根据 MAC 地址转发</h3><p style="text-indent:2em">在使用同轴电缆的以太网（10BASE5、10BASE2）等介质共享网络中，同一时间只能有一台主机发送数据。当连网的主机数量增加时，通信性能会明显下降。若将集线器或集中器等设备以星型连接，就出现了一款新的网络设备——交换集线器，这是一种将非介质共享型网络中所使用的交换机用在以太网中的技术，交换集线器也叫做以太网交换机。</p>
+
+<p style="text-indent:2em">以太网交换机就是持有多个 <b><i>端口</i></b> 的网桥。它们根据数据链路层中每个帧的目标 MAC 地址，决定从哪个网络接口发送数据。这时所参考的、用以记录发送接口的表就叫做转发表（Forwarding Table）。</p>
+
+<p style="text-indent:2em">这种转发表的内容不需要使用者在每个终端或交换机上手工设置，而是可以自动生成。数据链路层的每个通过点在接到包时，会从中将源 MAC 地址以及曾经接收该地址发送的数据包的接口作为对应关系记录到转发表中。以某个 MAC 地址作为源地址的包由某一接口接收，实质上可以理解为该 MAC 地址就是该接口的目标。因此也可以说，以该 MAC 地址作为目标地址的包，经由该接口送出即可。这一过程也叫自学过程。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192312589.png" alt="image-20230419231225495"></p>
+<center>--- 图 3.12 --- 交换机的自学原理</center>
+
+<p style="text-indent:2em">由于 MAC 地址没有层次性，转发表中的入口个数与整个数据链路中所有网络设备的数量有关。当设备数量增加时，转发表也会随之变大，检索转发表所用的时间也就越来越长。当连接多个终端时，有必要将网络分成多个数据链路，采用类似于网络层的 IP 地址一样对地址进行分层管理。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>交换机的转发方式 ：</i></b></p>
+
+<p style="text-indent:2em">交换机转发方式有两种，一种叫存储转发，另一种叫直通转发。</p>
+
+<p style="text-indent:2em">存储转发方式检查以太网数据帧末尾的 FCS 位后再进行转发。因此，可以避免发送由于冲突而被破坏的顿或噪声导致的错误顿。</p>
+
+<p style="text-indent:2em">直通转发方式中不需要将整个帧全部接收下来以后再进行转发。只需要得知目标地址即可开始转发。因此，它具有延迟较短的优势。但同时也不可避免地有发送错误帧的可能性。</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>端口 ：计算机设备的外部接口都称做端口。必须注意 TCP 或 UDP 等传输层协议中的“端口”另有其他含义。</p>
+<hr>
+<h3 id="3-2-5环路检测技术"><a href="#3-2-5环路检测技术" class="headerlink" title="3.2.5	环路检测技术"></a>3.2.5	环路检测技术</h3><p style="text-indent:2em">通过网桥连接网络时，一旦出现环路该如何处理？这与网络的拓扑结构和所使用的网桥种类有直接关系。最坏的情况下，数据帧会在环路中被一而再再而三地持续转发。而一旦这种数据帧越积越多将会导致 <b><i>网络瘫痪</i></b>。</p>
+
+<p style="text-indent:2em">为此，有必要解决网络中的环路问题。具体有生成树与源路由两种方式。如果使用具有这些功能的网桥，那么即使构建了一个带有环路的网络，也不会造成那么严重的问题。只要搭建合适的环路，就能分散网络流量，在发生某一处路由故障时选择绕行，可以提高容灾能力。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304192321346.png" alt="image-20230419232109266"></p>
+<center>--- 图 3.13 ---网桥搭建带有环路的网络</center>
+
+
+
+<p style="text-indent:2em"><b><i>生成树方式 ：</i></b></p>
+
+<p style="text-indent:2em">该方法由 IEEE802.1D 定义。每个网桥必须在每1~10秒内相互交换 BPDU（Bridge Protocol Data Unit）包，从而判断哪些端口使用哪些不使用，以便消除环路。一旦发生故障，则自动切换通信线路，利用那些没有被使用的端口继续进行传输。</p>
+
+<p style="text-indent:2em">例如，以某一个网桥为构造树的根（Root）,并对每个端口设置权重。这一权重可以由网络管理员适当地设置，指定优先使用哪些端口以及发生问题时该使用哪些端口。</p>
+
+<p style="text-indent:2em">生成树法其实与计算机和路由器的功能没有关系，但是只要有生成树的功能就足以消除环路。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304201039739.png" alt="image-20230420103829733"></p>
+<center>--- 图 3.14 --- 生成树法</center>
+
+<p style="text-indent:2em">IEEE802.1D 中所定义的生成树方法有一个弊端，就是在发生故障切换网络时需要几十秒的时间。为了解决这个用时过长的问题，在 IEEE802.1W 中定义了一个叫 RSTP（Rapid Spanning Tree Protocol）的方法。该方法能将发生问题时的恢复时间缩短到几秒以内。</p>
+
+
+
+<p style="text-indent:2em"><b><i>源路由法 ：</i></b></p>
+
+<p style="text-indent:2em">源路由法最早由 IBM 提出，以解决令牌环网络的问题。该方式可以判断发送数据的源地址是通过哪个网桥实现传输的，并将帧写入 RIF（Routing Information Field）。网桥则根据这个 RIF 信息发送帧给目标地址。因此，即使网桥中出现了环路，数据帧也不会被反复转发，可成功地发送到目标地址。在这种机制中发送端本身必须具备源路由的功能。</p>
+
+<hr>
+<p><b><i>脚注 ：</i></b></p>
+<p>网络瘫痪 ：是指由于异常的数据帧遍布网络，造成无法正常通信的状态。很多情况下只有关掉网络设备的电源或断开网络才能恢复。</p>
+<hr>
+<h3 id="3-2-6VLAN"><a href="#3-2-6VLAN" class="headerlink" title="3.2.6	VLAN"></a>3.2.6	VLAN</h3><p style="text-indent:2em">进行网络管理的时候，时常会遇到分散网络负载、变换部署网络设备的位置等情况。而有时管理员在做这些操作时，不得不修改网络的拓扑结构，这也就意味着必须进行硬件线路的改造。然而，如果采用带有 VLAN 技术的网桥，就不用实际修改网络布线，只需修改网络的结构即可。VLAN 技术附加到网桥/2层交换机（曾在1.9.4节做过介绍）上，就可以切断所有 VLAN 之间的所有通信。因此，相比一般的网桥/2层交换机，VLAN 可以过滤多余的包，提高网络的承载效率。</p>
+
+<p style="text-indent:2em">那么 VLAN 究竞是什么？如图 3.15 所示，该交换机按照其端口区分了多个网段，从而区分了广播数据传播的范围、减少了网络负载并提高了网络的安全性。然而异构的两个网段之间，就需要利用具有路由功能的交换机（如3层交换机），或在各段中间通过路由器的连接才能实现通信。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304201055721.png" alt="image-20230420105544653"></p>
+<center>--- 图 3.15 --- 简单的 VLAN</center>
+
+<p style="text-indent:2em">对这种 VLAN 进行了扩展，又定义了 IEEE802.1Q 的标准（也叫 TAG VLAN）,该标准允许包含跨越异构交换机的网段。TAG VLAN 中对每个网段都用一个 VLAN ID 的标签进行唯一标识。在交换机中传输帧时，在以太网首部加入这个 VID 标签，根据这个值决定将数据帧发送给哪个网段。各个交换机之间流动的数据帧的格式请参考图 3.21 中的帧格式。</p>
+
+<p style="text-indent:2em">随着 VLAN 技术的应用，不必再重新修改布线，只要修改网段即可。当然，有时物理网络结构与逻辑网络结构也可能会出现不一致的情况，导致不易管理。为此，应该加强对网段构成及网络运行等的管理。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304201110005.png" alt="image-20230420111002876"></p>
+<center>--- 图 3.16 --- 跨交换机的 VLAN</center>
+
+
+
+<h2 id="3-3以太网"><a href="#3-3以太网" class="headerlink" title="3.3	以太网"></a><center>3.3	以太网</center></h2><p style="text-indent:2em">在众多数据链路中最为著名、使用最为广泛的莫过于 <b><i>以太网（Ethernet）</i></b>它的规范简单，易于 NIC（网卡）及驱动程序实现。因此，在 LAN 普及初期，以太网网卡相对其他网卡，价格也比较低廉。这也同时促进了以太网自身的普及。从最初的 10Mbps、1Gbps、10Gbps 到后来的 40Gbps/100Gbps 以太网已能够支持高速网络。现在，以太网已成为最具兼容性与未来发展性的一种数据链路。</p>
+
+<p style="text-indent:2em">以太网最早是由美国的 Xerox 公司与前 DEC 公司设计的一种通信方式，当时命名为 Ethernet。之后由 IEEE802.3 委员会将其规范化。但是这两者之间对以太网网帧的格式定义还是有所不同的。因此，<b><i>IEEE802.3 所规范的以太网有时又被称为802.3以太网</i></b>。</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>以太网（Ethernet）：以太网(Ethernet)一词源于 Ether（以太），意为介质。在爱因斯坦提出量子力学之前，人们普遍认为宇宙空间充满以太，并以波的形式传送着光。</p>
+<p>IEEE802.3 所规范的以太网有时又被称为802.3以太网 ：反之，一般的以太网则有时被叫做 DIX 以太网。DIX 由 DEC、Intel 和 Xerox 等公司名称的首字母组成。</p>
+<hr>
+<h3 id="3-3-1以太网连接形式"><a href="#3-3-1以太网连接形式" class="headerlink" title="3.3.1	以太网连接形式"></a>3.3.1	以太网连接形式</h3><p style="text-indent:2em">在以太网普及之初，一般采用多台终端使用同一根同轴电缆的共享介质型连接方式。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304201742165.png" alt="image-20230420174258100"></p>
+<center>--- 图 3.17 --- 初期以太网结构举例</center>
+
+<p style="text-indent:2em">而现在，随着互连设备的处理能力以及传输速度的提高，一般都采用终端与交换机之间独占电缆的方式实现以太网通信，如图 3.18。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304201744307.png" alt="image-20230420174431276"></p>
+<center>--- 图 3.18 --- 现代以太网结构举例</center>
+
+
+
+
+
+<hr>
+<h3 id="3-3-2以太网的分类"><a href="#3-3-2以太网的分类" class="headerlink" title="3.3.2	以太网的分类"></a>3.3.2	以太网的分类</h3><p style="text-indent:2em">以太网因通信电缆的不同及通信速度的差异，衍生出了众多不同的以太网类型。</p>
+
+<p style="text-indent:2em">10BASE 中的“10”、100BASE 中的“100”、1000BASE 中的“1000”以及 10GBASE 中的“10G”分别指 10Mbps、100Mbps、1Gbps 以及 10Gbps 的传输速度。而追加于后面的“5”、“2”、“T”、“F”等字符表示的是传输介质。在传输速度相同而传输所用电缆不同的情况下，可以连接那些允许更换传输介质的中继器或集线器。而在传输速度不同的情况下，则必须采用那些允许变更速度的设备如网桥、交换集线器或路由器。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">以太网种类</th>
+<th align="center">电缆最大长度</th>
+<th align="center">电缆种类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">10BASE2</td>
+<td align="center">185m（最大节点数为30）</td>
+<td align="center">同轴电缆</td>
+</tr>
+<tr>
+<td align="center">10BASE5</td>
+<td align="center">500m（最大节点数为100）</td>
+<td align="center">同轴电缆</td>
+</tr>
+<tr>
+<td align="center">10BASE-T</td>
+<td align="center">100m</td>
+<td align="center">双绞线（<b><i>UTP</i></b> - <b><i>CAT</i></b> 3 - 5）</td>
+</tr>
+<tr>
+<td align="center">10BASE-F</td>
+<td align="center">1000m</td>
+<td align="center">多模光纤（<b><i>MMF</i></b>）</td>
+</tr>
+<tr>
+<td align="center">100BASE-TX</td>
+<td align="center">100m</td>
+<td align="center">双绞线（UTP - CAT5&#x2F;<b><i>STP</i></b>）</td>
+</tr>
+<tr>
+<td align="center">100BASE-FX</td>
+<td align="center">412m</td>
+<td align="center">多模光纤（MMF）</td>
+</tr>
+<tr>
+<td align="center">100BASE-T4</td>
+<td align="center">100m</td>
+<td align="center">双绞线（UTP - CAT3 - 5）</td>
+</tr>
+<tr>
+<td align="center">1000BASE-CX</td>
+<td align="center">25m</td>
+<td align="center">屏蔽铜线</td>
+</tr>
+<tr>
+<td align="center">1000BASE-SX</td>
+<td align="center">220m &#x2F; 550m</td>
+<td align="center">多模光纤（MMF）</td>
+</tr>
+<tr>
+<td align="center">1000BASE-LX</td>
+<td align="center">550m &#x2F; 5000m</td>
+<td align="center">多模 &#x2F; 单模光纤（MMF &#x2F; <b><i>SMF</i></b>）</td>
+</tr>
+<tr>
+<td align="center">1000BASE-T</td>
+<td align="center">100m</td>
+<td align="center">双绞线（UTP - CAT5 &#x2F; 5e)</td>
+</tr>
+<tr>
+<td align="center">10GBASE-SR</td>
+<td align="center">26m~300m</td>
+<td align="center">多模光纤（MMF）</td>
+</tr>
+<tr>
+<td align="center">10GBASE-LR</td>
+<td align="center">1000m~2500m</td>
+<td align="center">单模光纤（SMF）</td>
+</tr>
+<tr>
+<td align="center">10GBASE-ER</td>
+<td align="center">3000m &#x2F; 4000m</td>
+<td align="center">单模光纤（SMF）</td>
+</tr>
+<tr>
+<td align="center">10GBASE-T</td>
+<td align="center">100m</td>
+<td align="center">双绞线（UTP &#x2F; <b><i>FTP</i></b>  CAT6a)</td>
+</tr>
+</tbody></table>
+<center>--- 表 3.1 --- 以太网主要分类及其特点</center>
+
+<hr>
+<p style="text-indent:2em"><b><i>传输速度与计算机内部的表现值：</i></b></p>
+
+<p style="text-indent:2em">计算机内部采用二进制，因此以 2^10 表示最接近于1000的值。于是有如下等式。</p>
+
+<ul>
+<li>1K &#x3D; 1024</li>
+<li>1M &#x3D; 1024K</li>
+<li>1G &#x3D; 1024M</li>
+</ul>
+<p style="text-indent:2em">而以太网中以时钟频率决定传输速度。以下等式请不要与上面混淆。</p>
+
+<ul>
+<li>1K &#x3D; 1000</li>
+<li>1M &#x3D; 1000K</li>
+<li>1G &#x3D; 1000M</li>
+</ul>
+<hr>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>UTP ：Unshielded Twisted Pair Cable，非屏蔽双绞线。</p>
+<p>CAT ：Category的简写。TIA &#x2F; EIA（Telecommunication Industries Association &#x2F; Electronic Industries Alliance，美团电信工业协会 &#x2F; 美国电子工业协议）制定的双绞线规格。CAT 值越大，表明传输速度越高。</p>
+<p>MMF ：Multi Mode Fiber，多模光纤。</p>
+<p>STP ：Shielded Twisted Pair Cable，屏蔽双绞线。</p>
+<p>SMF ：Single Mode Fiber，单模光纤。</p>
+<p>FTP ：Foil Twisted - Pair，铝箔总屏蔽双絞线。</p>
+<hr>
+<h3 id="3-3-3以太网的历史"><a href="#3-3-3以太网的历史" class="headerlink" title="3.3.3	以太网的历史"></a>3.3.3	以太网的历史</h3><p style="text-indent:2em">最早被规范化的以太网采用同轴电缆的总线型 10BASE5 网络。之后，出现了使用细同轴电缆的10BASE2（thin 以太网）、双绞线 10BASE-T（双绞线以太网）、高速 100BASE-TX（高速以太网）、100BASE-T（千兆以太网）以及 10G 以太网等众多以太网规范。</p>
+
+<p style="text-indent:2em">起初以太网的访问控制一般以半双工通信为前提采用 CSMA/CD 方式。CSMA/CD 前身与以太网同步使用，主要用来解决冲突检查的问题。然而，这时的 CSMA/CD 同时也成为了以太网高速化的一个主要瓶颈。即使出现了 100Mbps 的 FDDI,以太网仍然滞留在 10Mbps 的速度上，以至于人们一度认为要想获取更高速的网络，只能放弃以太网另寻他路。</p>
+
+<p style="text-indent:2em">而这种状况并没有持续太久，随着 <b><i>ATM 交换技术</i></b> 的进步和 <b><i>CAT5 UTP</i></b> 电缆的普及很快就被打破。以太网的结构也发生了变化，逐渐采用像共享介质网络那样直接与交换机连接的方式。于是，冲突检查不再是必要内容，网络变得更加高速。此外，不使用交换机的半双工通信以及使用同轴电缆的总线型通信已经逐渐退出历史舞台。</p>
+
+<p style="text-indent:2em">从此，由于不会产生冲突，早先人们所认为的那些在网络拥堵的情况下性能下降得都不如 FDDI 的观点也逐渐淡化。而且在同等性能的情况下，以太网简单的结构与低廉的成本是 FDDI 所不能比及的。难怪有人认为，随着以太网的迅速发展（从100Mbps,1Gbps 到 10Gbps）,可以说已经“没必要再研究其他有线局域网技术”了。</p>
+
+<p style="text-indent:2em">前面提及了多种以太网类型。不论哪种类型的以太网，它们都有一个共性：由 IEEE802.3 的分会（Ethernet Working Group）进行标准化。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>IEEE802 ：</i></b></p>
+
+<p style="text-indent:2em">IEEE（The Institute of Electronical and Electronics Engineers，美国电子和电气工程师协会）委员会中，依据不同的工作小组制定了各种局域网技术标准。以下是 IEEE802 委员会的构成。因于1980年2月启动局域网国际标准化项目，所以命名为802。</p>
+
+<ul>
+<li>IEEE802.1<ul>
+<li>Higher Layer LAN Protocols Working Group</li>
+</ul>
+</li>
+<li>IEEE802.2<ul>
+<li>Logical Link Control Working Group</li>
+</ul>
+</li>
+<li>IEEE802.3<ul>
+<li>Ethernet Working Group (CSMA&#x2F;CD)</li>
+<li>10BASE5 &#x2F; 10BASE2 &#x2F; 10BASE-T &#x2F; 10Broad36</li>
+<li>100BASE-TX &#x2F; 1000BASE-T &#x2F; 10Gb&#x2F;s Ethernet</li>
+</ul>
+</li>
+<li>IEEE802.4<ul>
+<li>Token Bus Working Group (MAP&#x2F;TOP)</li>
+</ul>
+</li>
+<li>IEEE802.5<ul>
+<li>Token Ring Working Group (4Mbps&#x2F;16Mbps)</li>
+</ul>
+</li>
+<li>IEEE802.6<ul>
+<li>Metropolitan Area Network Working Group (MAN)</li>
+</ul>
+</li>
+<li>IEEE802.7<ul>
+<li>Broadband TAG</li>
+</ul>
+</li>
+<li>IEEE802.8<ul>
+<li>Fiber Optic TAG</li>
+</ul>
+</li>
+<li>IEEE802.9<ul>
+<li>Isochronous LAN Working Group</li>
+</ul>
+</li>
+<li>IEEE802.10<ul>
+<li>Security Working Group</li>
+</ul>
+</li>
+<li>IEEE802.11<ul>
+<li>Wireless LAN Working Group</li>
+</ul>
+</li>
+<li>IEEE802.12<ul>
+<li>Demand Priority Working Group (100VG - AnyLAN)</li>
+</ul>
+</li>
+<li>IEEE802.14<ul>
+<li>Cable Modem Working Group</li>
+</ul>
+</li>
+<li>IEEE802.15<ul>
+<li>Wireless Personal Area Network (WPAN) Working Group</li>
+</ul>
+</li>
+<li>IEEE802.16<ul>
+<li>Broadband Wireless Access Working Group</li>
+</ul>
+</li>
+<li>IEEE802.17<ul>
+<li>Resilient Packet Ring Working Group</li>
+</ul>
+</li>
+<li>IEEE802.18<ul>
+<li>Radio Regulatory TAG</li>
+</ul>
+</li>
+<li>IEEE802.19<ul>
+<li>Coexistence TAG</li>
+</ul>
+</li>
+<li>IEEE802.20<ul>
+<li>Mobile Broadband Wireless Access</li>
+</ul>
+</li>
+<li>IEEE802.21<ul>
+<li>Media Independent Handoff</li>
+</ul>
+</li>
+<li>IEEE802.22<ul>
+<li>Wireless Regional Area Networks</li>
+</ul>
+</li>
+</ul>
+<hr>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>ATM 交换技术 ：ATM 中将固定长度的信元通过交换机快速传送。</p>
+<p>CAT5 UTP ：100BASE-TX 在满足快速通信的同时，采用价格低廉的 CAT5 非屏蔽双绞线（UTP）。</p>
+<hr>
+<h3 id="3-3-4以太网帧格式"><a href="#3-3-4以太网帧格式" class="headerlink" title="3.3.4	以太网帧格式"></a>3.3.4	以太网帧格式</h3><p style="text-indent:2em">以太网帧前端有一个叫做前导码（Preamble）的部分，它由 0、1 数字交替组合而成，表示一个以太网帧的开始，也是对端网卡能够确保与其同步的标志。如图 3.19 所示。前导码末尾是一个叫做 SFD（Start Frame Delimiter）的域，它的值是“11”。在这个域之后就是以太网帧的本体（图 3.20）。前导码与 SFD 合起来占 <b><i>8 个字节</i></b>。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304211724426.png" alt="image-20230421172420275"></p>
+<center>--- 图 3.19 --- 以太网的前导码</center>
+
+<p style="text-indent:2em">以太网帧本体的前端是以太网的首部，它总共占 14 个字节。分别是 6 个字节的目标 MAC 地址、6 个字节的源 MAC 地址以及 2 个字节的上层协议类型。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>比特（位）、字节、8位字节 ：</i></b></p>
+
+<ul>
+<li><p>比特（位）：</p>
+<p>二进制中最小的单位。每个比特（位）地值要么是0要么是1</p>
+</li>
+<li><p>字节 ：</p>
+<p>通常8个比特构成一个字节。本书就以8个比特作为1个字节处理。然而在某些特殊的计算机中，1个字节有时包含6个比特、7个比特或9个比特。</p>
+</li>
+<li><p>8位字节 ：</p>
+<p>8个比特也被称为8位字节。只有为了强调1个字节中包含8个比特时才会使用。</p>
+</li>
+</ul>
+<hr>
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304211751805.png" alt="image-20230421175116722"></p>
+<center>--- 图 3.20 --- 以太网帧格式</center>
+
+<p style="text-indent:2em">紧随帧头后面的是数据。一个数据帧所能容纳的最大数据范围是 46~1500 个字节。帧尾是一个叫做FCS（Frame Check Sequence，帧检验序列）的 4 个字节。</p>
+
+<p style="text-indent:2em">在目标 MAC 地址中存放了目标工作站的物理地址。源 MAC 地址中则存放构造以太网帧的发送端工作站的物理地址。</p>
+
+<p style="text-indent:2em">类型通常跟数据一起传送，它包含用以标识协议类型的编号，即表明以太网的再上一层网络协议的类型。在这个字段的后面，则是该类型所标识的协议首部及其数据。关于主要的协议类型请参考表 3.2。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">类型编号（16进制）</th>
+<th align="center">协议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0000 - 05DC</td>
+<td align="center">IEEE802.3 Length Field（01500）</td>
+</tr>
+<tr>
+<td align="center">0101 - 01FF</td>
+<td align="center">实验用</td>
+</tr>
+<tr>
+<td align="center">0800</td>
+<td align="center">Internet IP（IPv4）</td>
+</tr>
+<tr>
+<td align="center">0806</td>
+<td align="center">Address Resolution Protocol （ARP）</td>
+</tr>
+<tr>
+<td align="center">8035</td>
+<td align="center">Reverse Address Resolution Protocol （RARP）</td>
+</tr>
+<tr>
+<td align="center">8037</td>
+<td align="center">IPX（Novell NetWare）</td>
+</tr>
+<tr>
+<td align="center">805B</td>
+<td align="center">VMTP （Versatile Message Transaction Protocol）</td>
+</tr>
+<tr>
+<td align="center">809B</td>
+<td align="center">AppleTalk （EtherTalk）</td>
+</tr>
+<tr>
+<td align="center">80F3</td>
+<td align="center">AppleTalk Address Resolution Protocol （AARP）</td>
+</tr>
+<tr>
+<td align="center">8100</td>
+<td align="center">IEEE802.1Q Customer VLAN</td>
+</tr>
+<tr>
+<td align="center">814C</td>
+<td align="center">SNMP over Ethernet</td>
+</tr>
+<tr>
+<td align="center">8191</td>
+<td align="center">NetBIOS &#x2F; NetBEUI</td>
+</tr>
+<tr>
+<td align="center">817D</td>
+<td align="center">XTP</td>
+</tr>
+<tr>
+<td align="center">86DD</td>
+<td align="center">IP version 6（IPv6）</td>
+</tr>
+<tr>
+<td align="center">8847~8848</td>
+<td align="center">MPLS （Multi-protocol Label Switching）</td>
+</tr>
+<tr>
+<td align="center">8863</td>
+<td align="center">PPPoE Discovery Stage</td>
+</tr>
+<tr>
+<td align="center">8864</td>
+<td align="center">PPPoE Session Stage</td>
+</tr>
+<tr>
+<td align="center">9000</td>
+<td align="center">Loopback （Configuration Test Protocol）</td>
+</tr>
+</tbody></table>
+<center>--- 表 3.2 --- 以太网主要协议类型及其作用</center>
+
+<p style="text-indent:2em">帧尾最后出现的是 FCS。用它可以检查帧是否有所损坏。在通信传输过程中如果出现电子噪声的干扰，可能会影响发送数据导致乱码位的出现。因此，通过检查这个 FCS 字段的值可以将那些受到噪声干扰的错误帧丢弃。</p>
+
+<p style="text-indent:2em">FCS 中保存着整个帧除以生成多项式的余数。在接收端也用同样的方式计算，如果得到 FCS 的值相同，就 <b><i>判定所接收的帧没有差错</i></b>。</p>
+
+<p style="text-indent:2em">IEEE802.3 Ethernet 与一般的以太网在帧的首部上稍有区别。一般以太网帧中表示类型的字段，在IEEE802.3 以太网中却表示帧的长度。此外，数据部分的前端还有 LLC 和 SNAP 等字段。而标识上一层协议类型的字段就出现在这个 SNAP 中。不过 SNAP 中指定的协议类型与一般以太网协议类型的意思基本相同。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304211958939.png" alt="image-20230421195826897"></p>
+<center>--- 图 3.21 --- VLAN 中以太网帧的格式</center>
+
+<hr>
+<p style="text-indent:2em"><b><i>数据链路层分为两层 ：</i></b></p>
+
+<p style="text-indent:2em">如果再进一步细分，还可以将数据链路层分为 <b><i>介质访问控制层</i></b> 和 <b><i>逻辑链路控制层</i></b>。</p>
+
+<p style="text-indent:2em">介质访问控制层根据以太网或 FDDI 等不同数据链路所特有的首部信息进行控制。与之相比，逻辑链路层则根据以太网或 FDDI 等不同数据链路所共有的帧头信息进行控制。</p>
+
+<p style="text-indent:2em">IEEE802.3 Ethernet 的帧格式中附加的 LLC 和 SNAP（由 IEEE802.2 制定）就是由逻辑链路控制的首部信息。从表 3.2 可以看出，当类型字段的值为 01500（05DC）时，表示 IEEE802.3 Ethernet 的长度。此时，即使参考类型对照表也无法确定上层协议的类型。在 IEEE802.3 Ethernet 中紧随其以太网首部的 LLC/SNAP 字段中包含了上层协议类型信息。因此只有查找到 SNAP 以后才能继而判断上层协议的类型。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304212002806.png" alt="image-20230421200252764"></p>
+<center>--- 图 3.22 --- LLC/SNAP 格式</center>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>8 个字节 ：8位字节（octet）指包含8比特的1个字节。与人们平常说的字节（Byte）类似。</p>
+<p>判定所接收的帧没有差错 ：FCS 具有较强的检错能力，能够检测出大量突发错误。</p>
+<p>CFI ：Canonical Format Indicator，标准格式指示位。当进行源路由时值为1。</p>
+<p>介质访问控制层 ：介质访问控制层简称MAC（Media Access Control)</p>
+<p>逻辑链路控制层 ：逻辑链路控制层简称 LLC（Logical Link Control）</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WangHao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/04/19/tujietcpip-3/">http://example.com/2023/04/19/tujietcpip-3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">归途</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><a class="post-meta__tags" href="/tags/%E3%80%8A%E5%9B%BE%E8%A7%A3TCP-IP%E3%80%8B/">《图解TCP/IP》</a></div><div class="post_share"><div class="social-share" data-image="https://pic2.zhimg.com/80/v2-e22aaad20d20634f506f57fff0fcbc17_1440w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/04/English-2023-5-4/" title="English-2023/5/4"><img class="cover" src="https://picx.zhimg.com/80/v2-9c50d3af0bc62a0e8b6e89e24c769317_1440w.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">English-2023/5/4</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/15/tujietcpip-2/" title="《图解TCP/IP》（2）"><img class="cover" src="https://pic3.zhimg.com/80/v2-e5c15010b8ba4608a1974403a02a2da0_1440w.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">《图解TCP/IP》（2）</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/04/15/tujietcpip-2/" title="《图解TCP&#x2F;IP》（2）"><img class="cover" src="https://pic3.zhimg.com/80/v2-e5c15010b8ba4608a1974403a02a2da0_1440w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-15</div><div class="title">《图解TCP&#x2F;IP》（2）</div></div></a></div><div><a href="/2023/04/06/tujietcpip-1/" title="《图解TCP&#x2F;IP》（1）"><img class="cover" src="https://pic1.zhimg.com/80/v2-03a22891ccba9bccf6424dfd7cbf4be7_1440w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-06</div><div class="title">《图解TCP&#x2F;IP》（1）</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304092347441.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">WangHao</div><div class="author-info__description">人们聚和离、云朵来又往；讲故事的人，总有一个故事不愿讲。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WH-wanghao/WH-wanghao.github.io"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/WH-wanghao" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2025450495@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2025450495&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC3%E7%AB%A0%E3%80%81%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF"><span class="toc-text">第3章、数据链路	</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">3.1	数据链路的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E7%9B%B8%E5%85%B3%E6%8A%80%E6%9C%AF"><span class="toc-text">3.2	数据链路相关技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-1MAC-%E5%9C%B0%E5%9D%80"><span class="toc-text">3.2.1	MAC 地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2%E5%85%B1%E4%BA%AB%E4%BB%8B%E8%B4%A8%E5%9E%8B%E7%BD%91%E7%BB%9C"><span class="toc-text">3.2.2	共享介质型网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3%E9%9D%9E%E4%BB%8B%E8%B4%A8%E5%85%B1%E4%BA%AB%E7%BD%91%E7%BB%9C"><span class="toc-text">3.2.3	非介质共享网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-4%E6%A0%B9%E6%8D%AE-MAC-%E5%9C%B0%E5%9D%80%E8%BD%AC%E5%8F%91"><span class="toc-text">3.2.4	根据 MAC 地址转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-5%E7%8E%AF%E8%B7%AF%E6%A3%80%E6%B5%8B%E6%8A%80%E6%9C%AF"><span class="toc-text">3.2.5	环路检测技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-6VLAN"><span class="toc-text">3.2.6	VLAN</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3%E4%BB%A5%E5%A4%AA%E7%BD%91"><span class="toc-text">3.3	以太网</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-1%E4%BB%A5%E5%A4%AA%E7%BD%91%E8%BF%9E%E6%8E%A5%E5%BD%A2%E5%BC%8F"><span class="toc-text">3.3.1	以太网连接形式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-2%E4%BB%A5%E5%A4%AA%E7%BD%91%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">3.3.2	以太网的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-3%E4%BB%A5%E5%A4%AA%E7%BD%91%E7%9A%84%E5%8E%86%E5%8F%B2"><span class="toc-text">3.3.3	以太网的历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-4%E4%BB%A5%E5%A4%AA%E7%BD%91%E5%B8%A7%E6%A0%BC%E5%BC%8F"><span class="toc-text">3.3.4	以太网帧格式</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/05/04/English-2023-5-4/" title="English-2023/5/4"><img src="https://picx.zhimg.com/80/v2-9c50d3af0bc62a0e8b6e89e24c769317_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="English-2023/5/4"/></a><div class="content"><a class="title" href="/2023/05/04/English-2023-5-4/" title="English-2023/5/4">English-2023/5/4</a><time datetime="2023-05-03T23:49:37.000Z" title="发表于 2023-05-04 07:49:37">2023-05-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/19/tujietcpip-3/" title="《图解TCP/IP》（3）"><img src="https://pic2.zhimg.com/80/v2-e22aaad20d20634f506f57fff0fcbc17_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《图解TCP/IP》（3）"/></a><div class="content"><a class="title" href="/2023/04/19/tujietcpip-3/" title="《图解TCP/IP》（3）">《图解TCP/IP》（3）</a><time datetime="2023-04-19T12:28:06.000Z" title="发表于 2023-04-19 20:28:06">2023-04-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/15/tujietcpip-2/" title="《图解TCP/IP》（2）"><img src="https://pic3.zhimg.com/80/v2-e5c15010b8ba4608a1974403a02a2da0_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《图解TCP/IP》（2）"/></a><div class="content"><a class="title" href="/2023/04/15/tujietcpip-2/" title="《图解TCP/IP》（2）">《图解TCP/IP》（2）</a><time datetime="2023-04-15T10:19:21.000Z" title="发表于 2023-04-15 18:19:21">2023-04-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/06/tujietcpip-1/" title="《图解TCP/IP》（1）"><img src="https://pic1.zhimg.com/80/v2-03a22891ccba9bccf6424dfd7cbf4be7_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《图解TCP/IP》（1）"/></a><div class="content"><a class="title" href="/2023/04/06/tujietcpip-1/" title="《图解TCP/IP》（1）">《图解TCP/IP》（1）</a><time datetime="2023-04-06T15:12:23.000Z" title="发表于 2023-04-06 23:12:23">2023-04-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/05/hello-world/" title="Hello World"><img src="https://pic2.zhimg.com/80/v2-29e78b52051ce542adf6d786d61fbd19_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/2023/04/05/hello-world/" title="Hello World">Hello World</a><time datetime="2023-04-04T17:28:16.045Z" title="发表于 2023-04-05 01:28:16">2023-04-05</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://pic2.zhimg.com/80/v2-e22aaad20d20634f506f57fff0fcbc17_1440w.webp')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By WangHao</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="8281432682" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-loop="all" data-order="random"> </div><script async src="/js/title.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,YOU" data-fontsize="15px" data-random="false" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></body></html>

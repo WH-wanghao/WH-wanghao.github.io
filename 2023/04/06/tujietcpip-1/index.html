@@ -1,0 +1,1419 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>《图解TCP/IP》（1） | 归途</title><meta name="author" content="WangHao"><meta name="copyright" content="WangHao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="第1章、网络基础知识1.1	计算机网络出现的背景 1.1.1	计算机的普及与多样化   1.1.2	从独立模式到网络互连模式起初，计算机以单机模式广泛应用（这种方式也叫独立模式）。然而随着计算机的不断发展，人们已经不再局限于单机模式，而是将一个个计算机连接在一起，形成一个计算机网络。连续多台计算机可以实现信息共享，同时还能再两台物理位置较远的机器之间即时传递信息。   --- 图 1.1 ---">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《图解TCP&#x2F;IP》（1）">
+<meta property="og:url" content="http://example.com/2023/04/06/tujietcpip-1/index.html">
+<meta property="og:site_name" content="归途">
+<meta property="og:description" content="第1章、网络基础知识1.1	计算机网络出现的背景 1.1.1	计算机的普及与多样化   1.1.2	从独立模式到网络互连模式起初，计算机以单机模式广泛应用（这种方式也叫独立模式）。然而随着计算机的不断发展，人们已经不再局限于单机模式，而是将一个个计算机连接在一起，形成一个计算机网络。连续多台计算机可以实现信息共享，同时还能再两台物理位置较远的机器之间即时传递信息。   --- 图 1.1 ---">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-03a22891ccba9bccf6424dfd7cbf4be7_1440w.webp">
+<meta property="article:published_time" content="2023-04-06T15:12:23.000Z">
+<meta property="article:modified_time" content="2023-05-04T00:07:53.334Z">
+<meta property="article:author" content="WangHao">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="《图解TCP&#x2F;IP》">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.zhimg.com/80/v2-03a22891ccba9bccf6424dfd7cbf4be7_1440w.webp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/04/06/tujietcpip-1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: WangHao","link":"链接: ","source":"来源: 归途","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '《图解TCP/IP》（1）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2023-05-04 08:07:53'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/transpancy.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304092347441.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://pic1.zhimg.com/80/v2-03a22891ccba9bccf6424dfd7cbf4be7_1440w.webp')"><nav id="nav"><span id="blog-info"><a href="/" title="归途"><span class="site-name">归途</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">《图解TCP/IP》（1）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-06T15:12:23.000Z" title="发表于 2023-04-06 23:12:23">2023-04-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-04T00:07:53.334Z" title="更新于 2023-05-04 08:07:53">2023-05-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E3%80%8A%E5%9B%BE%E8%A7%A3TCP-IP%E3%80%8B%EF%BC%88%E7%AC%AC%E4%BA%94%E7%89%88%EF%BC%89/">《图解TCP/IP》（第五版）</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="《图解TCP/IP》（1）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="第1章、网络基础知识"><a href="#第1章、网络基础知识" class="headerlink" title="第1章、网络基础知识"></a><center>第1章、网络基础知识</h1><h2 id="1-1计算机网络出现的背景"><a href="#1-1计算机网络出现的背景" class="headerlink" title="1.1	计算机网络出现的背景"></a><center>1.1	计算机网络出现的背景</center></h2><hr>
+<h3 id="1-1-1计算机的普及与多样化"><a href="#1-1-1计算机的普及与多样化" class="headerlink" title="1.1.1	计算机的普及与多样化"></a>1.1.1	计算机的普及与多样化</h3><br/>
+
+<hr>
+<h3 id="1-1-2从独立模式到网络互连模式"><a href="#1-1-2从独立模式到网络互连模式" class="headerlink" title="1.1.2	从独立模式到网络互连模式"></a>1.1.2	从独立模式到网络互连模式</h3><p style="text-indent:2em">起初，计算机以单机模式广泛应用（这种方式也叫独立模式）。然而随着计算机的不断发展，人们已经不再局限于单机模式，而是将一个个计算机连接在一起，形成一个计算机网络。连续多台计算机可以实现信息共享，同时还能再两台物理位置较远的机器之间即时传递信息。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304061953162.png"></p>
+<center>--- 图 1.1 --- 以独立模式使用计算机</center>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304061954096.png"></p>
+<center>--- 图 1.2 --- 以网络互联方式使用计算机</center>
+
+<p style="text-indent:2em">计算机网络，根据其规模可分为 WAN (Wide Area Network，广域网）和 LAN (Local Area Network，局域网)。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304061952392.png"></p>
+<center>--- 图 1.3 --- LAN</center>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304061952091.png"></p>
+<center>--- 图 1.4 --- WAN</center>
+
+<p>[^广域网]: 指覆盖多个远距离区域的远程网络。比广域网再小一级的，连接整个城市的网络叫城域网(MAN，Metropolitan Area Network)。<br>[^局域网]: 指一个楼层、一栋楼或一个校园等相对较小区域内的网络。</p>
+<hr>
+<h3 id="1-1-3从计算机通信到信息通信"><a href="#1-1-3从计算机通信到信息通信" class="headerlink" title="1.1.3	从计算机通信到信息通信"></a>1.1.3	从计算机通信到信息通信</h3><p style="text-indent:2em">最初，由管理员将特定的几台计算机相连在一起形成计算机网络。例如，将同一公司、同一实验室所持有的计算机连接在一起，或是将有业务往来的企业之间的计算机相连在一起。总而言之，形成的是一种私有的网络。</p>
+
+<p style="text-indent:2em">随着这种私有网络的不断发展，人们开始尝试将多个私有网络相互连接形成组成更大的私有网络。这种网络又逐渐发展演变成为互联网为公众所使用。</p>
+
+<p style="text-indent:2em">连接到互联网以后，计算机之间的通信已不再局限于公司或部门内部，而是能够与互联网中的任何一台计算机进行通信。互联网作为一门新兴技术，极大地丰富了当时以电话、邮政以及传真为主的通信手段，逐渐被人们所接受。</p>
+
+<p style="text-indent:2em">此后，人们不断研发各种互联网接入技术，使得各种五花八门的通信终端都能够连接到互联网，使互联网成为一个世界级规模的计算机网络，形成了现在这种综合通信环境。</p>
+
+
+
+<hr>
+<h3 id="1-1-4计算机网络的作用"><a href="#1-1-4计算机网络的作用" class="headerlink" title="1.1.4	计算机网络的作用"></a>1.1.4	计算机网络的作用</h3><p style="text-indent:2em">计算机网络好比一个人的神经系统。一个人身上的所有感觉都由神经传递到大脑。与之类似，世界各地的信息也通过网络传递到每个人的计算机当中。</p>
+
+<p style="text-indent:2em">随着互联网爆发性的发展与普及，信息网络已随处可见。社团成员、学校同窗之间可以通过邮件组、主页、BBS论坛相互联系，甚至可以通过网络日志、聊天室、即时通信以及 SNS 实现互联和信息互换。</p>
+
+<p style="text-indent:2em">信息网络如同我们身边的空气，触手可及。然而，就在不久之前，岂止是网络，对一般人来说就是使用一台计算机都不是那么容易的事。</p>
+
+<p>[^SNS]: 社交网络。指由一群个人或团体在互联网上组成的关系网络。通过 SNS ，人们可以发布自己近期的活动、生活感想以及最新作品，让圈内成员实时掌握个人动态。</p>
+<h2 id="1-2计算机与网络发展的-7-个阶段"><a href="#1-2计算机与网络发展的-7-个阶段" class="headerlink" title="1.2	计算机与网络发展的 7 个阶段"></a><center>1.2	计算机与网络发展的 7 个阶段</center></h2><h3 id="1-2-1批处理"><a href="#1-2-1批处理" class="headerlink" title="1.2.1	批处理"></a>1.2.1	批处理</h3><p style="text-indent:2em">为了能让更多的人使用计算机，出现了批处理系统（Batch Processing）系统。所谓批处理，是指事先将用户程序和数据装入卡带或磁带，并由计算机按照一定的顺序读取，使用户所要执行的程序和数据能够一并批量得到处理的方式。</p>
+
+<p style="text-indent:2em">当时这种计算机价格昂贵体积庞大，无法在一般的办公场所使用。因此，通常放置于专门进行计算机管理和运维的计算机中心。而用户除了事先将程序和数据装入卡带或磁带送到这样的中心运行之外别无选择。</p>
+
+
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304072306407.png" alt="image-20230406234016795"></p>
+<center>--- 图 1.5 ---  批处理</center> 
+
+<p style="text-indent:2em">当时的计算机操作起来相当复杂，不是所有人都能够轻松自如的使用。因此在实际运行程序时通常会交给专门的操作员去处理。有时程序处理时间较长，在用户较多的情况下，用户程序可能无法立即得到运行。这时用户只能将程序留给操作员，过些时日再来计算机中心取结果。</p>
+
+<p style="text-indent:2em">批处理时代的计算机主要用于大规模计算或处理，因此那时的计算机尚不是一个便于普通人使用的工具。</p>
+
+
+
+<hr>
+<h3 id="1-2-2分时系统"><a href="#1-2-2分时系统" class="headerlink" title="1.2.2	分时系统"></a>1.2.2	分时系统</h3><p style="text-indent:2em">继批处理系统之后，20世纪60年代出现了分时系统（ <b><i>TSS</i></b> ）。它是指多个 <b><i>终端</i></b> 与同一个计算机连接，允许多个用户同时使用一台计算机的系统。当时计算机造价非常昂贵，一人一台计算机的费用对一般人来说可望而不可即。然而分时系统的产生则实现了 “一人一机” 的目的，让用户感觉就好像 “完全是自己在使用一台计算机一样” 。这也体现了分时系统的一个重要特性——独占性。</p>
+
+
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304072306409.png" alt="image-20230407192012492"></p>
+<center>--- 图 1.6 --- 分时系统</center>
+
+<p style="text-indent:2em"><i>注：分时系统的重要特性包括 多路性、独占性、交互性和及时性。</i></p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>TSS ：Time Sharing System</p>
+<p>终端 ：由键盘、显示器等输入输出设备组成。最初还包括打字机。</p>
+<hr>
+<p style="text-indent:2em">分时系统出现以来，计算机的可用性得到了极大的改善，尤其是在 <b><i>交互式（对话式）操作</i></b> 上。从此，计算机变得更加人性化，逐渐贴近我们的生活。</p>
+
+
+
+<p style="text-indent:2em">此外，分时系统还促进了像 <b><i>BASIC</i></b> 这样能够实现与计算机交互的编程语言的发展。而在此之前的 COBOL 和 FORTRAN 等计算机编程语言都必须以批处理系统为基础才能开发和运行。其实 BASIC 语言的发明是为了让更多的人学习如何编程，因此也可以说它是关注分时系统的初学者门必学的一门编程语言。</p>
+
+<p style="text-indent:2em">由于分时系统的独占性，使得装备一套用户可直接操作的计算机环境变得比以前简单。分时系统中每个终端与计算机之间使用通信线路形成一个 <b><i>星形结构</i></b> 。正是从这一时期开始，网络（通信）与计算机之间的关系逐渐浮出水面。小型机也随即产生，办公场所与工厂也逐渐引入计算机。</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>交互式（对话式）操作 :指计算机依据用户给出的指令完成处理并将结果返回给用户。这种操作方法在现在计算机中极其普遍，然而在分时系统诞生之前，这种方式式不可能实现的。</p>
+<p>BASIC :1956年由美国达特茅斯学院 John  G.   Kemeny 与 Thomas  E  Kurtz  两位教授为分时系统初学者设计的一种编程语言。由于该语言的简单、易学等特性，它也成为众多 PC 出场设置中既有的标准安装语言。</p>
+<p>星形结构 :中心有一台计算机，周围连接着众多终端，形似星形（*）</p>
+<hr>
+<h3 id="1-2-3计算机之间的通信"><a href="#1-2-3计算机之间的通信" class="headerlink" title="1.2.3	计算机之间的通信"></a>1.2.3	计算机之间的通信</h3><p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304072306410.png" alt="image-20230407204614134"></p>
+<center>--- 图 1.7 --- 计算机之间的通信</center>
+
+<p style="text-indent:2em"><i>注：在我们国内计算机普及的时间点与本书中以西方发达国家为背景的情况是有些出入的。大约滞后 5 ~ 10 年。</i></p>
+
+<p style="text-indent:2em">到了20世纪70年代，计算机性能有了飞速发展，体积也趋于小型化，同时价格急剧下降。于是计算机不再仅仅局限于在研究机关使用，一般的企业也逐渐开始使用计算机。因为企业内部对使用计算机处理日常事务的呼声越来越高。为了提高工作效率，人们开始研究计算机与计算机之间通信的技术。</p>
+
+<p style="text-indent:2em">在计算机间的通信技术诞生之前，想要将一台计算机中的数据转移到另一台计算机中是相当繁琐的。那是，得将数据保存到磁带、软盘等 <b><i>外部存储介质</i></b> 中，再将这些介质送到目的计算机才能实现数据转储。然而有了计算机间的通信技术（计算机与计算机之间由通信线路连接），人们能够很轻松地即时读取另一台计算机中的数据，从而极大地缩短了传送数据的时间。</p>
+
+<p style="text-indent:2em">计算机间的通信显著地提高了计算机的可用性。人们不再局限于仅使用一台计算机进行处理，而是逐渐使用多台计算机进行处理，最终一并得到返回结果。这一趋势打破了一家公司仅购入一台计算机进行业务处理的局面，使每家公司能够以部门为单位引入计算机，来处理部门内部的数据。每个部门处理完本部门内的数据以后，经由通信线路传送到总部的计算机，再由总部计算机处理并得出最终的数据结果。</p>
+
+<p style="text-indent:2em">从此，计算机的发展又进入了一个崭新的历史阶段。在这一阶段计算机更侧重于满足使用者的需求、架构更灵活的系统，且操作比以往更加人性化。</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>外部存储介质 :可插拔的存储计算机信息的设备，最初只有磁盘与软盘。</p>
+<hr>
+<h3 id="1-2-4计算机网络的产生"><a href="#1-2-4计算机网络的产生" class="headerlink" title="1.2.4	计算机网络的产生"></a>1.2.4	计算机网络的产生</h3><p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304072306411.png" alt="image-20230407224156064"></p>
+<center>--- 图 1.8 --- 计算机网络（20世纪80年代）</center>
+
+<p style="text-indent:2em">20世纪70年代初期，人们开始实验基于分组交换技术的计算机网络，并着手研究不同厂商的计算机之间相互通信的技术。到了80年代，一种能够互连多种计算机的网络随之诞生。它能够让各式各样的计算机相互连接，从大型的超级计算机或主机到小型的个人电脑。</p>
+
+<p style="text-indent:2em">计算机的发展与普及使人们对网络不再陌生。其中 <b><i>窗口系统</i></b> 的发明，更是拉近了人们与网络之间的距离，使用户更加体会到了网络的便捷之处。有了窗口系统，用户不仅可以同时执行多个程序，还能在这些程序之间自由的切换作业。例如，在工作站上创建一个文档的同时，可以登录到主机执行其他程序，也可以从数据库服务器下载必要的数据，还可以通过电子邮件联系朋友。随着窗口系统与网络的紧密结合，我们已经可以在电脑上自由地进行网上冲浪，享受网上的丰富资源了。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304072306412.png" alt="image-20230407225404683"></p>
+<center>--- 图 1.9 --- 窗口系统的产生与计算机网络</center>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>窗口系统 :在计算机中可以打开多个图形窗口进行处理的系统。代表产品有常用于 UNIX 上的 X Window System 以及微软公司的 Windows 、苹果公司的 MacOS 。这些系统允许将多个程序分配在多个窗口上运行，还可以依次进行执行切换。</p>
+<h3 id="1-2-5互联网的普及"><a href="#1-2-5互联网的普及" class="headerlink" title="1.2.5	互联网的普及"></a>1.2.5	互联网的普及</h3><p style="text-indent:2em">进入20世纪90年代，那些专注于信息处理的公司和大学已为每一位员工和研究人员分配了一台计算机，形成“一人一机”的环境。然而这种环境的搭建不仅成本不菲，在使用过程当中也会遇到很多新的问题。这也是为什么后来人们打响了“瘦身”与“ <b><i>多供应商</i></b> 连接”（异构计算机之间的连接）这两个口号的原因。其目的在于通过连接不同厂商的计算机建立一个成本更低的网络环境。而连接异构型计算机的通信网络技术就是现在我们所看到的 <b><i>互联网技术</i></b> 。</p>
+
+<p style="text-indent:2em">与此同时，诸如电子邮件（ E-mail )、万维网（ WWW，World Wide Web 的简称）等信息传播方式如雨后春笋般迎来了前所未有的发展，使得互联网从大到整个公司范围小到每个家庭内部，都得以广泛普及</p>
+
+<p style="text-indent:2em">面对这样一种趋势，各家厂商不仅力图保证自家产品的互联性，还着力于让自己的网络技术不断与互联网技术兼容。这些厂商也不再只着眼于大企业，而是针对每一个家庭或 <b><i>SOHO</i></b> 也陆续推出了特定的网络服务及网络产品。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>瘦身:</i></b></p>
+
+<p style="text-indent:2em">20世纪90年代上半叶，个人电脑与 UNIX 工作站从性能上已不亚于一台主机。再加上个人电脑与 UNIX 工作站本身的网络功能不断提高，利用这些设备搭建一个网络要比使用大型主机构建网络更有优势，主要体现再两个方面：操作简单，价格低廉。由此也引发了一个旨在降低网络架构成本的新趋势。这一去趋势被人们称为“瘦身”。之所以叫“瘦身”是因为这一趋势导致那些曾经在大型主机上才能运行的
+公司核心业务系统逐渐被转移到“轻量型”的个人电脑或 UNIX 工作站上去运行。不论是从机体规模上还是从成本上都有“瘦身减负”之意。
+
+<hr>
+<p style="text-indent:2em">现在，像互联网、E-mail、Web 、主页等已成为了人们再熟悉不过的名词。这也足以说明信息网络、互联网已经渗透到我们的生活中。个人电脑在诞生之初可以说主要是一种单机模式的工具，而现在它则被更广泛地应用于互联网的访问。而且，无论相距多远，世界各地的人们只要接入互联网，就可以通过个人电脑实现即时沟通和交流。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304082307624.png" alt="image-20230408220718307"></p>
+<center>--- 图 1.10 --- 公司或家庭接入互联网</center>
+
+<p style="text-indent:2em"><i>注：在我们国内计算机普及的时间点与本书中以西方发达国家为背景的情况是有些出入的。大约滞后 5 ~ 10 年。</i></p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>多供应商 ：这里指计算机硬件或软甲的供应商。相比单供应商（硬件和软件都使用通一个厂商的产品所搭建的网络）而言，多供应商是指将各种软件硬件供应商的产品组合起来搭建的网络。</p>
+<p>互联网技术 ：1990年个人电脑连接局域网通常采用 Novell 公司的 NetWare 系统。然而，想要连接所有类型的计算机（如大型主机、小型机、UNIX工作站以及个人电脑），TCP&#x2F;IP技术则更受人关注。</p>
+<p>SOHO ：以较小办公室或家庭办公室为从业地点的企业。</p>
+<hr>
+<h3 id="1-2-6以互联网技术为中心的时代"><a href="#1-2-6以互联网技术为中心的时代" class="headerlink" title="1.2.6	以互联网技术为中心的时代"></a>1.2.6	以互联网技术为中心的时代</h3><p style="text-indent:2em">互联网的普及和发展着实对通信领域产生了巨大的影响。</p>
+
+<p style="text-indent:2em">许多发展道路各不相同的网络技术也都正在向互联网靠拢。例如，曾经一直作为通信基础设施、支撑通信网络的电话网，随着互联网的快速发展，其地位也随着时间的推移为 IP（Internet Protocol）网所取代，而 IP 网本来就是互联网技术的产物。通过  IP 网，人们不仅可以实现电话通信、电视播放，还能实现计算机之间的通信，建立互联网。并且，能够联网的设备也不仅限于单纯的计算机，而是扩展到了手机、家用电器、游戏机等许多其他产品。或许在未来，可能还会增加更多各式各样的现在无法想象的设备。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304082307625.png" alt="image-20230408222438093"></p>
+<center>--- 图 1.11 --- 通过 IP 协议实现通信、播放的统一</center>
+
+
+
+<hr>
+<h3 id="1-2-7从“单纯建立连接”到“安全建立连接”"><a href="#1-2-7从“单纯建立连接”到“安全建立连接”" class="headerlink" title="1.2.7	从“单纯建立连接”到“安全建立连接”"></a>1.2.7	从“单纯建立连接”到“安全建立连接”</h3><p style="text-indent:2em">互联网让世界各地的人们通过计算机跨越国界自由地连接在了一起。通过互联网人们可以搜索信息、沟通交流、共享信息、查看新闻报道以及实现远程控制设备。然而，这么便利的功能，对于20年前的人们来说却是望尘莫及。互联网正呈现给人一个高度便捷的网络信息环境。因此，它也正成为一个国家社会基础设施建设中最基本的要素之一。</p>
+
+<p style="text-indent:2em">正如事物具有两面性，互联网的便捷性也给人们的生活带来了负面问题。计算机病毒的侵害、信息泄露、网络欺诈等利用互联网的犯罪行为日益增多。在现实当中，人们可以通过远离险境避开一些危险，然而对于连接到互联网的计算机而言，即时在办公室或在自己的家里也有可能会受到网络所带来的诸多侵害。此外，由于设备故障导致无法联网可能会影响公司的业务开展或个人的日常生活。这些负面影响所带来的巨大损失也不容忽视。</p>
+
+<p style="text-indent:2em">在互联网普及的初期，人们更关注单纯的连接性，以不受任何限制地建立互联网连接为最终目的。然而现在，人们已不再满足于“单纯建立连接”，而是更为追求“安全建立连接”的目标。</p>
+
+<p style="text-indent:2em">公司和社会团体在建立互联网连接前，应理解通信网络的机制、充分考虑联网后的日常运维流程以及基本的“自我防卫“手段。这些已经成为安全生产不可或缺的组成部分。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">年代</th>
+<th align="center">内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">20世纪50年代</td>
+<td align="center">批处理时代</td>
+</tr>
+<tr>
+<td align="center">20世纪60年代</td>
+<td align="center">分时系统时代</td>
+</tr>
+<tr>
+<td align="center">20世纪70年代</td>
+<td align="center">计算机间通信时代</td>
+</tr>
+<tr>
+<td align="center">20世纪80年代</td>
+<td align="center">计算机网络时代</td>
+</tr>
+<tr>
+<td align="center">20世纪90年代</td>
+<td align="center">互联网普及时代</td>
+</tr>
+<tr>
+<td align="center">2000年</td>
+<td align="center">以互联网为中心的时代</td>
+</tr>
+<tr>
+<td align="center">2010年</td>
+<td align="center">无论何时何地一切皆 TCP&#x2F;IP 的网络时代</td>
+</tr>
+</tbody></table>
+<center>--- 表 1.1 --- 计算机使用模式的演变</center>
+
+
+
+<hr>
+<h3 id="1-2-8手握金刚钻的-TCP-x2F-IP"><a href="#1-2-8手握金刚钻的-TCP-x2F-IP" class="headerlink" title="1.2.8	手握金刚钻的 TCP&#x2F; IP"></a>1.2.8	手握金刚钻的 TCP&#x2F; IP</h3><p style="text-indent:2em">如前面所介绍，互联网是由许多独立发展的网络通信技术融合而成。能够使它们之间不断融合并实现统一的正是TCP/IP技术。那么TCP/IP的机制究竞又是如何呢？</p>
+
+<p style="text-indent:2em">TCP/IP是通信协议的统称。在学习下一章TCP/IP核心机制之前，有必要先理清“协议”的概念。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>连接人与人的计算机网络：</i></b>
+
+<p style="text-indent:2em">计算机网络最初的目的是连接一个个独立的计算机，使它们组成一个更强有力的计算环境。简而言之，就是为了提高生产力。从批处理时代到计算机网络时代，毋庸置疑，都体现了这一目的。然而，现在却似乎有了微妙的变化。</p>
+<p style="text-indent:2em">现代计算机网络的首要目的之一，可以说是连接人与人。置身于世界各地的人们可以通过网络建立联系、相互沟通、交流思想。然而这些在计算机网络初期是无法实现的。这种连接人与人的计算机网络，已经逐渐给人们的日常生活、学校教育、科学研究、公司发展带来了巨大的变革。</p>
+
+<hr>
+<h2 id="1-3协议"><a href="#1-3协议" class="headerlink" title="1.3	协议"></a><center>1.3	协议</center></h2><hr>
+<h3 id="1-3-1随处可见的协议"><a href="#1-3-1随处可见的协议" class="headerlink" title="1.3.1	随处可见的协议"></a>1.3.1	随处可见的协议</h3><p style="text-indent:2em">在计算机网络与信息通信领域里，人们经常提及“协议”一词。互联网中常用的具有代表性的协议有IP、TCP、HTTP等。而LAN(局域网)中常用的协议有 <b><i>IPX/SPX</i></b> 等。</p>
+
+<p style="text-indent:2em">“计算机网络体系结构”将这些网络协议进行了系统的归纳。TCP/IP就是IP、TCP、HTTP等协议的集合。现在，很多设备都支持TCP/IP。除此之外，还有很多其他类型的网络体系结构。例如，Novell公司的 IPX/SPX、苹果公司的AppleTalk(仅限苹果公司计算机使用)、IBM公司开发的用于构建大规模网络的 <b><i>SNA</i></b> 以及 <b><i>前DEC公司</i></b> 开发的DECnet等。</p>
+
+
+
+<table>
+<thead>
+<tr>
+<th align="center">网络体系结构</th>
+<th align="center">协议</th>
+<th align="center">主要用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">TCP&#x2F;IP</td>
+<td align="center">IP，ICMP，TCP，UDP，HTTP，TELNET，SNMP，SMTP……</td>
+<td align="center">互联网、局域网</td>
+</tr>
+<tr>
+<td align="center">IPX&#x2F;SPX（Net Ware）</td>
+<td align="center">IPX，SPX，NPC……</td>
+<td align="center">个人电脑局域网</td>
+</tr>
+<tr>
+<td align="center">AppleTalk</td>
+<td align="center">DDP，RTMP，AEP，ATP，ZIP……</td>
+<td align="center">苹果公司现有产品的局域网</td>
+</tr>
+<tr>
+<td align="center">DECnet</td>
+<td align="center">DPR，NSP，SCP……</td>
+<td align="center">前 DEC 小型机</td>
+</tr>
+<tr>
+<td align="center">OSI</td>
+<td align="center">FTAM，MOTIS，VT，CMIS&#x2F;CMIP，CLNP，CONP……</td>
+<td align="center">——</td>
+</tr>
+<tr>
+<td align="center"><b><i>XNS</i></b></td>
+<td align="center">IDP，SPP，PEP……</td>
+<td align="center">施乐公司网络</td>
+</tr>
+</tbody></table>
+<center>--- 表 1.2 --- 各种网络体系结构及其协议</center>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>IPX&#x2F;SPX ：Novell 公司开发的 NetWare 系统的协议。</p>
+<p>SNA ：System Network Architecture</p>
+<p>前 DEC 公司 ：1998年被收购。</p>
+<p>XNS ：Xerox Network Services</p>
+<hr>
+<hr>
+<h3 id="1-3-2协议的必要性"><a href="#1-3-2协议的必要性" class="headerlink" title="1.3.2	协议的必要性"></a>1.3.2	协议的必要性</h3><p style="text-indent:2em">通常，我们发送一封电子邮件、访问某个主页获取信息时察觉不到协议的存在，只有在我们重新配置计算机的网络连接、修改网络设置时才有可能涉及协议。因此只要网络设置完成、联网成功，人们通常也就会忘记协议之类的事情。只要应用程序了解如何利用相关协议，就足以让人们顺利使用所建的网络连接。通常也不会有一个人因为不懂某些协议导致不能上网的情况。然而在通过网络实现互通信的过程背后，协议却起到了至关重要的作用。</p>
+
+<p style="text-indent:2em">简单来说，协议就是计算机与计算机之间通过网络实现通信时事先达成的种“约定”。这种“约定”使那些由不同厂商的设备、不同的CPU以及不同的操作系统组成的计算机之间，只要遵循相同的协议就能够实现通信。反之，如果所使用的协议不同，就无法实现通信。这就好比两个人使用不同国家的语言说话，怎么也无法相互理解。协议可以分为很多种，每一种协议都明确地界定了它的行为规范。两台计算机之间必须能够支持相同的协议，并遵循相同协议进行处理，这样才能实现相互通信。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>CPU 与 OS：</i></b>
+
+<p style="text-indent:2em">CPU(Central Processing Unit)译作中央处理器。它如同一台计算机的“心脏”，每个程序实际上是由它调度执行的。CPU的性能很大程度上也决定着一台计算机的处理性能。因此人们常说计算机的发展史实际上是CPU的发展史。</p>
+
+<p style="text-indent:2em">目前人们常用的 CPU 有 Intel Core、Intel Atom 以及 ARM Cortex 等</p>
+
+<p style="text-indent:2em">OS(Operating System)译作操作系统，是一种基础软件。它集合了CPU管理、内存管理、计算机外围设备管理以及程序运行管理等重要功能。本书所要介绍的 TCP 或 IP 协议的处理，很多情况下其实已经内嵌到具体的操作系统中了。如今在个人电脑中普遍使用的操作系统有 UNIX、Windows、Mac OS X、Linux等。</p>
+
+<p style="text-indent:2em">一台计算机中可运行的指令，因其 CPU、操作系统的不同而有所差异。因此，如果将针对某些特定的CPU或操作系统设计的程序直接复制到具有其他类型 CPU 或操作系统的计算机中，就不一定能够直接运行。计算机中存储的数据也因 CPU 和操作系统的差异而有所不同。因此，若在 CPU 和操作系统不同的计算机之间实现通信，则需要一个各方支持的协议，并遵循这个协议进行数据读取。</p>
+
+<p style="text-indent:2em">此外，一个 CPU 通常在同一时间只能运行一个程序。为了让多个程序同时运行，操作系统采用 CPU 时间片轮转机制，在多个程序之间进行切换，合理调度。这种方式叫做多任务调度。前面 1.2.2 节中提到的分时系统的实现，实际上就是采用了这种方式。</p>
+
+<hr>
+<hr>
+<h3 id="1-3-3协议如同人与人的对话"><a href="#1-3-3协议如同人与人的对话" class="headerlink" title="1.3.3	协议如同人与人的对话"></a>1.3.3	协议如同人与人的对话</h3><p style="text-indent:2em">在此举一个简单的例子。有三个人 A、B、C。A 只会说汉语、B 只会说英语、而 C 既会说汉语又会说英语。现在 A 与 B 要聊天，他们之间该如何沟通呢？若 A 与 C 要聊天，又会怎样？这时如果我们：</p>
+
+<ul padding-left:2em>
+    <li>将汉语和英语当作“协议”</li>
+    <li>将聊天当作“通信”</li>
+    <li>将说话的内容当作“数据”</li>
+</ul>
+
+<p style="text-indent:2em">那么 A 与 B 之间由于各持一种语言，恐怕说多久也无法交流。因为他们之间的谈话所用的协议（语言）不同，<b><i>双方都无法将数据（所说的话）传递给对方</i></b>。</p>
+
+<p style="text-indent:2em">接下来，我们分析 A 与 C 之间聊天的情况。两人都用汉语这个“协议”就能理解对方所要表达的具体含义了。也就是说 A 与 C 为了顺利沟通，采用同一种协议，使得他们之间能够传递所期望的数据（想要说给对方的话）。</p>
+
+<p style="text-indent:2em">如此看来，协议如同人们平常说话所用的语言。虽然语言是人类才具有的特性，但计算机与计算机之间通过网络进行通信时，也<b><i>可以认为是依据类似于人类“语言”实现了相互通信。</i></b></p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304090935396.png" alt="image-20230409093537231"></p>
+<center>--- 图 1.12 --- 协议如同人与人的对话</center>
+
+<hr>
+<p style="text-indent:2em"><b><i>脚注：</i></b></p>
+
+<p>双方都无法将数据（所说的话）传递给对方 ：若两人之间有个同声翻译，就能够顺利沟通了。在网络环境中，1.9.7节所要介绍的网关就起着这种翻译作用。</p>
+<p>可以认为是依据类似于人类“语言”实现了相互通信 ：与之相似，我们在日常生活中理所当然的一些行为，很多情况下都与“协议”这一概念<br>不谋而合。</p>
+<hr>
+<hr>
+<h3 id="1-3-4计算机中的协议"><a href="#1-3-4计算机中的协议" class="headerlink" title="1.3.4	计算机中的协议"></a>1.3.4	计算机中的协议</h3><p style="text-indent:2em">人类具有掌握知识的能力，对所学知识也有一定的应用能力和理解能力。因此在某种程度上，人与人的沟通并不受限于太多规则。即使有任何规则之类的东西，人们也可以通过自己的应变能力很自然地去适应规则。</p>
+
+<p style="text-indent:2em">然而这一切在计算机通信当中，显然无从实现。因为计算机的智能水平还没有达到人类的高度。其实，计算机从物理连接层面到应用程序的软件层面，各个组件都必须严格遵循着事先达成的约定才能实现真正的通信。此外，每个计算机还必须装有实现通信最基本功能的程序。如果将前面例子中提到的 A、B 与 C 替换到计算机中，就不难理解为什么需要明确定义协议，为什么要遵循既定的协议来设计软件和制造计算机硬件了。</p>
+
+<p style="text-indent:2em">人们平常说话时根本不需要特别注意就能顺其自然地吐字、发音。并且在很多场合，人类能够根据对方的语义、声音或表情，合理地调整自己的表达方式和所要传达的内容，从而避免给对方造成误解。甚至有时在谈话过程中如果不小心漏掉几个词，也能从谈话的语境和上下文中猜出对方所要表达的大体意思，不至于影响自己的理解。然而计算机做不到这一点。因此，在设计计算机程序与硬件时，要充分考虑通信过程中可能会遇到的各种异常以及对异常的处理。在实际遇到问题时，正在通信的计算机之间也必须具备相应的设备和程序以应对异常。</p>
+
+<p style="text-indent:2em">在计算机通信中，事先达成一个详细的约定，并遵循这一约定进行处理尤为重要。这种约定其实就是“协议”。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304091015398.png" alt="image-20230409101534351"></p>
+<center>--- 图 1.13 --- 计算机通信协议</center>
+
+
+
+<hr>
+<h3 id="1-3-5分组交换协议"><a href="#1-3-5分组交换协议" class="headerlink" title="1.3.5	分组交换协议"></a>1.3.5	分组交换协议</h3><p style="text-indent:2em"><u>分组交换是指将大数据分割为一个个叫做包(Packet)的较小单位进行传输的方法。</u>这里所说的包，如同我们平常在邮局里见到的邮包。分组交换就是将大数据分装为一个个这样的邮包交给对方。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304091020006.png" alt="image-20230409102012939"></p>
+<center>--- 图 1.14 --- 分组通信</center>
+
+<p style="text-indent:2em">当人们邮寄包裹时，通常会填写一个寄件单贴到包裹上再交给邮局。寄件单上一般会有寄件人和收件人的详细地址。类似地，<u>计算机通信也会在每一个分组中附加上源主机地址和目标主机地址送给通信线路。这些发送端地址、接收端地址以及分组序号写入的部分称为“报文首部”。</u></p>
+
+<p style="text-indent:2em"><u>一个较大的数据被分为多个分组时，为了标明是原始数据中的哪一部分，就有必要将分组的序号写入包中。接收端会根据这个序号，再将每个分组按照序号重新装配为原始数据。</u></p>
+
+<p style="text-indent:2em">通信协议中，通常会规定报文首部应该写入哪些信息、应该如何处理这些信息。相互通信的每一台计算机则根据协议构造报文首部、读取首部内容等。<u>为了双方能正确通信，分组的发送方和接收方有必要对报文首部和内容保持一致的定义和解释。</u></p>
+
+<p style="text-indent:2em">那么，通信协议到底由谁来规定呢？为了能够让不同厂商生产的计算机相互通信，有这么一个组织，它制定通信协议的规范，定义国际通用的标准。在下一节，我们将详细说明协议的标准化过程。</p>
+
+
+
+<hr>
+<h2 id="1-4协议由谁规定"><a href="#1-4协议由谁规定" class="headerlink" title="1.4	协议由谁规定 "></a><center>1.4	协议由谁规定 </center></h2><hr>
+<h3 id="1-4-1计算机通信的诞生及其标准化"><a href="#1-4-1计算机通信的诞生及其标准化" class="headerlink" title="1.4.1	计算机通信的诞生及其标准化"></a>1.4.1	计算机通信的诞生及其标准化</h3><p style="text-indent:2em">在计算机通信诞生之初，系统化与标准化并未得到足够的重视。每家计算机厂商都出产各自的网络产品来实现计算机通信。对于协议的系统化、分层化等事宜没有特别强烈的意识。</p>
+
+<p style="text-indent:2em">1974年，IBM 公司发布了 SNA ,将本公司的计算机通信技术作为系统化网络体系结构公之于众。从此，计算机厂商也纷纷发布各自的网络体系结构，引发了众多协议的系统化进程。然而，各家厂商的各种网络体系结构、各种协议之间并不相互兼容。即使是从物理层面上连接了两台异构的计算机，由于它们之间采用的网络体系结构不同，支持的协议不同，仍然无法实现正常的通信。</p>
+
+<p style="text-indent:2em">这对用户来说极其不便。因为这意味着起初采用了哪个厂商的计算机网络产品就只能一直使用同一厂商的产品。若相应的厂商破产或产品超过服务期限，就得将整套网络设备全部换掉。此外，因为不同部门之间使用的网络产品互不相同，所以就算将它们从物理上相互连接起来了也无法实现通信，这种情况亦不在少数。灵活性和可扩展性的缺乏使得当时的用户对计算机通信难以应用自如。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304101627243.png" alt="image-20230410162716090"></p>
+<center>--- 图 1.15 --- 协议中的方言与普通话</center>
+
+<p style="text-indent:2em">随着计算机重要性的不断提高，很多公司逐渐意识到兼容性的重要意义。人们开始着手研究使不同厂商生产的异构机型也能够互相通信的技术。这促进了网络的开放性和多供性。</p>
+
+
+
+<hr>
+<h3 id="1-4-2协议的标准化"><a href="#1-4-2协议的标准化" class="headerlink" title="1.4.2	协议的标准化"></a>1.4.2	协议的标准化</h3><p style="text-indent:2em">为了解决上述问题，<b><i>ISO</i></b> 制定了一个国际标准 <b><i>OSI</i></b>,对通信系统进行了标
+准化。现在，OSI 所定义的协议虽然并没有得到普及，但是在 OSI 协议设计之初作为其指导方针的 OS 参考模型却常被用于网络协议的制定当中。</p>
+<p style="text-indent:2em">本书将要说明的 TCP/IP 并非 ISO 所制定的某种国际标准。而是由 <b><i>IETF</i></b> 所建议的、致力于推进其标准化作业的一种协议。在当时，大学等研究机构和计算机行业作为中心力量，推动了 TCP/IP 的标准化进程。TCP/IP 作为互联网之上的一种标准，也作为<b><i>业界标准</i></b>，俨然已成为全世界所广泛应用的通信协议。那些支持互联网的设备及软件，也正着力遵循 IETF   标准化的 TCP/IP 协议。</p>
+
+<p style="text-indent:2em">协议得以标准化也使所有遵循标准协议的设备不再因计算机硬件或操作系统的差异而无法通信。因此，协议的标准化也推动了计算机网络的普及。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>标准化：</i></b></p>
+
+<p style="text-indent:2em">所谓标准化是指使不同厂商所生产的异构产品之间具有兼容性、便于使用的规范化过程。</p>
+
+<p style="text-indent:2em">除计算机通信领域之外，“标准”一词在日常用品如铅笔、厕纸、电源插座、音频、录音带等制造行业也屡见不鲜。如果这些产品的大小、形状总是各不相同，那将会给消费者带来巨大的麻烦。</p>
+
+<p style="text-indent:2em">标准化组织大致分为三类：国际级标准化机构，国家级标准化机构以及民间团体。目前国际级标准化机构有 ISO、<b><i>ITU-T</i></b> 等，而国家级标准化机构有日本的 JISC (制定了日本 JIS )和美国的 <b><i>ANSI</i></b>。民间团体则
+包括促进互联网协议标准化的 IETF 等组织。
+
+<p style="text-indent:2em">在现实世界里，有很多优秀的技术，由于其开发公司没有公开相应的开发规范导致这些技术没有得到广泛的普及。如果企业能够将自己的开发规范公之于众，让更多业界同行及时使用并成为行业标准，那么一定会有更多更好的产品可以存活下来供我们使用。</p>
+
+<p style="text-indent:2em">从某种程度上说，标准化是对世界具有极其重要影响的一项工作。</p>
+
+<hr>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>ISO ：International Organization for Standards，国际标准化组织。</p>
+<p>OSI ：Open Systems Interconnection，开放式通信系统互联参考模型。</p>
+<p>IETF ：Internet Engineering Task Force，国际互联网工程任务组。</p>
+<p>业界标准 ：非国家或国际机构等公共机构所制定的标准，但属于业界公认的标准。</p>
+<p>ITU-T ：International Telecommunication Union Telecommunication Standardization Sector,制定远程通信相关国际规范的委员会。是 ITU（International Telecommunication Union ：国际电信联盟)旗下的一个远程通信标准化组。前身是国际电报电话咨询委员会 CCITT （International Telegraph and Telephone Consultative Comnittee）</p>
+<p>ANSI ：American National Standards Institute。美国国家标准学会，属于美国国内的标准化组织。</p>
+<hr>
+<hr>
+<h2 id="1-5协议分层与-OSI-参考模型"><a href="#1-5协议分层与-OSI-参考模型" class="headerlink" title="1.5	协议分层与 OSI 参考模型"></a><center>1.5	协议分层与 OSI 参考模型</center></h2><h3 id="1-5-1协议的分层"><a href="#1-5-1协议的分层" class="headerlink" title="1.5.1	协议的分层"></a>1.5.1	协议的分层</h3><p style="text-indent:2em">ISO 在制定标准化 OSI 之前，对网络体系结构相关的问题进行了充分的讨论，最终提出了作为通信协议设计指标的 OSI 参考模型。<u>这一模型将通信协议中必要的功能分成了7层</u>。通过这些分层，使得那些比较复杂的网络协议更加简单化。</p>
+
+<p style="text-indent:2em">在这一模型中，<u>每个分层都接收由它下一层所提供的特定服务，并且负责为自己的上一层提供特定的服务。</u><u>上下层之间进行交互时所遵循的约定叫做“接口”。同一层之间的交互所遵循的约定叫做“协议”。</u></p>
+
+<p style="text-indent:2em">协议分层就如同计算机软件中的模块化开发。OSI 参考模型的建议是比较理想化的。它希望实现从第一层到第七层的所有模块，并将它们组合起来实现网络通信。分层可以将每个分层独立使用，即使系统中某些分层发生变化，也不会波及整个系统。因此，可以构造一个扩展性和灵活性都较强的系统。此外，通过分层能够细分通信功能，更易于单独实现每个分层的协议，并界定各个分层的具体责任和义务。这些都属于分层的优点。</p>
+
+<p style="text-indent:2em">而分层的劣势，可能就在于过分模块化、使处理变得更加沉重以及每个模块都不得不实现相似的处理逻辑等问题。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304101709355.png" alt="image-20230410170936283"></p>
+<center>--- 图 1.16 ---协议的分层</center>
+
+
+
+<hr>
+<h3 id="1-5-2通过对话理解分层"><a href="#1-5-2通过对话理解分层" class="headerlink" title="1.5.2	通过对话理解分层"></a>1.5.2	通过对话理解分层</h3><p style="text-indent:2em">关于协议的分层，我们再以 A 与 C 的对话为例简单说明一下。在此，我们只考虑语言层和通信设备层这两个分层的情况。</p>
+
+<p style="text-indent:2em">首先，以电话聊天为例，图1.17上半部分中的 A 与 C 两个人正在通过电话（通信设备）用汉语（语言协议）聊天。我们详细分析一下这张图。</p>
+
+<p style="text-indent:2em">表面上看 A 跟 C 是在用汉语直接对话，但实际上 A 与 C 都是在通过电话机的听筒听取声音，都在对着麦克风说话。想象一下如果有一个素未见过电话机的人见到这个场景会怎么想？恐怕他一定会以为 A 和 C 在跟电话机聊天吧。</p>
+
+<p style="text-indent:2em">其实在这个图中，他们所用的语言协议作为麦克风的音频输入，在通信设备层被转换为电波信号传送出去了。传送到对方的电话机后，又被通信设备层转换为音频输出，传递给了对方。因此，A 与 C 其实是利用电话机之间通过音频转化声音的接口实现了对话。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304101715092.png" alt="image-20230410171516999"></p>
+<center>--- 图 1.17 --- 语言层与设备层两层模型</center>
+
+<p style="text-indent:2em">通常人们会觉得拿起电话与人通话，其实就好像是直接在跟对方对话，然而如果仔细分析，在整个过程中实际上是电话机在做中介，这是不可否认的。如果 A 的电话机所传出的电子信号并未能转换成与 C 的电话机相同频率的声音，那会如何？这就如同 A 的电话机与 C 的电话机的协议互不相同。C 听到声音后可能会觉得自己不是在跟 A 而是在跟其他人说话。频率若是相去甚远，C 更有可能会觉得自己听到的不是汉语。</p>
+
+<p style="text-indent:2em">那么如果我们假定语言层相同而改变了通信设备层，情况会如何？例如，将电话机改为无线电。通信设备层如果改用无线电，那么就得学会使用无线电的方法。由于语言层仍然在使用汉语协议，因此使用者可以完全和以往打电话时一样正常通话（上图左下部分）。</p>
+
+<p style="text-indent:2em">那么，如果通信设备层使用电话机，而语言层改为英语的话情况又会如何？很显然，电话机本身不会受限于使用者使用的语言。因此，这种情况与使用汉语通话时完全一样，依然可以实现通话（上图右下部分）。</p>
+
+<p style="text-indent:2em">到此为止，读者可能会觉得这些都是再简单不过的、理所当然的事。在此仅举出简单的例子，权作对协议分层及其便利性的一个解释，以加深对分层协议的理解。</p>
+
+
+
+<hr>
+<h3 id="1-5-3OSI-参考模型"><a href="#1-5-3OSI-参考模型" class="headerlink" title="1.5.3	OSI 参考模型"></a>1.5.3	OSI 参考模型</h3><p style="text-indent:2em">前面只是将协议简单地分为了两层进行了举例说明。然而，实际的分组通信协议会相当复杂。OSI 参考模型将这样一个复杂的协议整理并分为了易于理解的7个分层。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304101723368.png" alt="image-20230410172315295"></p>
+<center>--- 图 1.18 --- OSI 参考模型与协议的含义</center>
+
+<p style="text-indent:2em">OSI 参考模型对通信中必要的功能做了很好的归纳。网络工程师在讨论协议相关问题时也经常以 OSI 参考模型的分层为原型。对于计算机网络的初学者，学习 OSI 参考模型可以说是通往成功的第一步。</p>
+
+<p style="text-indent:2em">不过，OSI 参考模型终究是一个“模型”，它也只是对各层的作用做了一系列粗略的界定，并没有对协议和接口进行详细的定义。它对学习和设计协议只能起到一个引导的作用。因此，若想要了解协议的更多细节，还是有必要参考每个协议本身的具体规范。</p>
+
+<p style="text-indent:2em">许多通信协议，都对应了 OSI 参考模型7个分层中的某层。通过这一点，可以大致了解该协议在整个通信功能中的位置和作用。</p>
+
+<p style="text-indent:2em">虽然要仔细阅读相应的规范说明书才能了解协议的具体内容，但是对于其大致的作用可以通过其所对应的 OSI 模型层来找到方向。这也是为什么在学习每一种协议之前，首先要学习 OSI 模型。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>OSI 协议与 OSI 参考模型：</i></b></p>
+
+<p style="text-indent:2em">本章所介绍的是 OSI 参考模型。然而人们也时常会听到 OSI 协议这个词。OSI 协议是为了让异构的计算机之间能够相互通信的、由 IS0 和 ITU-T 推进其标准化的一种网络体系结构。</p>
+
+<p style="text-indent:2em">OSI（参考模型）将通信功能划分为7个分层，称作 OSI 参考模型。OSI协议以 OSI 参考模型为基础界定了每个阶层的协议和每个阶层之间接口相关的标准。遵循 OSI 协议的产品叫 OSI 产品，而它们所遵循的通信则被称为 OSI 通信。由于 <u>“ OSI 参考模型” 与 “ OSI 协议” 指代意义不同</u>，请勿混淆。
+
+<p style="text-indent:2em">本书，通过对照 OSI 参考模型中通信功能的分类和 TCP/IP 的功能，逐层深入展开每一个话题。虽然实际的 TCP/IP 分层模型与 OSI 还有着若干区别，借助 OSI 参考模型可以有助于加深对 TCP/IP 的理解。</p>
+
+<hr>
+<hr>
+<h3 id="1-5-4OSI-参考模型中各个分层的作用"><a href="#1-5-4OSI-参考模型中各个分层的作用" class="headerlink" title="1.5.4	OSI 参考模型中各个分层的作用"></a>1.5.4	OSI 参考模型中各个分层的作用</h3><p style="text-indent:2em">在此，以图1.19为例简单说明 OSI 参考模型中各个分层的主要作用。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304101741875.png" alt="image-20230410174150773"></p>
+<center>--- 图 1.19 --- OSI 参考模型各层分工</center>
+
+<p style="text-indent:2em"><b><i>应用层：</i></b></p>
+
+<p style="text-indent:2em">为应用程序提供服务并规定应用程序中通信相关的细节。包括文件传输、电子邮件、远程登录（虚拟终端）等协议。</p>
+
+
+
+<p style="text-indent:2em"><b><i>表示层：</i></b></p>
+
+<p style="text-indent:2em">将应用处理的信息转换为适合网络传输的格式，或将来自下一层的数据转换为上层能够处理的格式。因此它主要负责数据格式的转换。</p>
+
+<p style="text-indent:2em">具体来说，就是将设备固有的数据格式转换为网络标准传输格式。不同设备对同一比特流解释的结果可能会不同。因此，使它们保持一致是这一层的主要作用。</p>
+
+
+
+<p style="text-indent:2em"><b><i>会话层：</i></b></p>
+
+<p style="text-indent:2em">负责建立和断开通信连接（数据流动的逻辑通路），以及数据的分割等数据传输相关的管理。</p>
+
+
+
+<p style="text-indent:2em"><b><i>传输层：</i></b></p>
+
+<p style="text-indent:2em">起着可靠传输的作用。只在通信双方节点上进行处理，而无需在路由器上处理。</p>
+
+
+
+<p style="text-indent:2em"><b><i>网络层：</i></b></p>
+
+<p style="text-indent:2em">将数据传输到目标地址。目标地址可以是多个网络通过路由器连接而成的某个地址。因此这一层主要负责寻址和路由选择。</p>
+
+
+
+<p style="text-indent:2em"><b><i>数据链路层：</i></b></p>
+
+<p style="text-indent:2em">负责物理层面上互连的、节点之间的通信传输。例如与1个以太网相连的2个节点之间的通信。</p>
+
+<p style="text-indent:2em">将0、1序列划分为具有意义的数据帧传送给对端（数据帧的生成与接收）。</p>
+
+
+
+<p style="text-indent:2em"><b><i>物理层：</i></b></p>
+
+<p style="text-indent:2em">负责0、1比特流(0、1序列)与电压的高低、光的闪灭之间的互换。</p>
+
+
+
+<hr>
+<h2 id="1-6OSI-参考模型通信处理举例"><a href="#1-6OSI-参考模型通信处理举例" class="headerlink" title="1.6	OSI 参考模型通信处理举例"></a><center>1.6	OSI 参考模型通信处理举例</h2><hr>
+<h3 id="1-6-17层通信"><a href="#1-6-17层通信" class="headerlink" title="1.6.1	7层通信"></a>1.6.1	7层通信</h3><p style="text-indent:2em">在7层 OSI 模型中，如何模块化通信传输？</p>
+
+<p style="text-indent:2em">分析方法可以借鉴图 1.17 语言与电话机组成的 2 层模型。发送方从第 7 层、第 6 层到第 1 层由上至下按照顺序传输数据，而接收端则从第 1 层、第 2 层到第 7 层由下至上向每个上一级分层传输数据。每个分层上，在处理由上一层传过来的数据时可以附上当前分层的协议所必须的“首部”信息。然后接收端对收到的数据进行数据“首部”与“内容”的分离，再转发给上一分层，并最终将发送端的数据恢复为原状。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304110940589.png" alt="image-20230411093757960"></p>
+<center>--- 图 1.20 --- 通信与 7 个分层</center>
+
+
+
+<hr>
+<h3 id="1-6-2会话层以上的处理"><a href="#1-6-2会话层以上的处理" class="headerlink" title="1.6.2	会话层以上的处理"></a>1.6.2	会话层以上的处理</h3><p style="text-indent:2em">假定用户 A 要给用户 B 发送一封内容为“早上好”邮件。网络究竟会进行哪些处理呢？我们由上至下进行分析。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304110941849.png" alt="image-20230411094117812"></p>
+<center>--- 图 1.21 --- 以电子邮件为例</center>
+
+
+
+
+<p style="text-indent:2em"><b><i>应用层：</i></b></p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304110943308.png" alt="image-20230411094332271"></p>
+<center>--- 图 1.22 --- 应用层的工作</center>
+
+<p style="text-indent:2em">用户 A 在主机 A 上新建一封电子邮件，指定收件人为 B,并输入邮件内容为“早上好”。</p>
+
+<p style="text-indent:2em">收发邮件的这款软件从功能上可以分为两大类：一部分是与通信相关的，一部分是与通信无关的。例如用户 A 从键盘输入“早上好”的这一部分就属于与通信无关的功能，而将“早上好”的内容发送给收件人 B 则是其与通信相关的功能。因此，此处的“输入电子邮件内容后发送给目标地址”也就相当于应用层。</p>
+
+<p style="text-indent:2em">从用户输入完所要发送的内容并点击“发送”按钮的那一刻开始，就进入了应用层协议的处理。<u>该协议会在所要传送数据的前端附加一个首部（标签）信息。该首部标明了邮件内容为“早上好”和收件人为“ B ”。</u>这一附有首部信息的数据传送给主机 B 以后由该主机上的收发邮件软件通过“收信”功能获取内容。<u>主机 B 上的应用收到由主机 A 发送过来的数据后，分析其数据首部与数据正文，并将邮件保存到硬盘或是其他<b><i>非易失性存储器</i></b>以备进行相应的处理</u>。<u>如果主机 B 上收件人的邮箱空间已满无法接收新的邮件，则会返回一个错误给发送方。对这类异常的处理也正属于应用层需要解决的问题</u>。</p>
+
+<p style="text-indent:2em">主机 A 与主机 B 通过它们各自应用层之间的通信，最终实现邮件的存储。</p>
+
+
+
+<p style="text-indent:2em"><b><i>表示层：</i></b></p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304110952591.png" alt="image-20230411095213549"></p>
+<center>--- 图 1.23 --- 表示层的工作</center>
+
+<p style="text-indent:2em">表示层的“表示”有“表现”、“演示”的意思，因此<b><i>更关注数据的具体表现形式</i></b>。此外，所使用的应用软件本身的不同也会导致数据的表现形式截然不同。例如有的字处理软件创建的文件只能由该字处理器厂商所提供的特定版本的软件才来打开读取。</p>
+
+<p style="text-indent:2em">那么，电子邮件中如果遇到此类问题该如何解决呢？如果用户 A 与用户 B 所使用的邮件客户端软件完全一致，就能够顺利收取和阅读邮件，不会遇到类似的问题。但是这在现实生活当中是不大可能的。让所有用户千篇一律地使用同一款客户端软件对使用者来说也<b><i>是极不方便的一件事情</i></b>。</p>
+
+<p style="text-indent:2em">解决这类问题有以下几种方法。<u>首先是利用表示层，将数据从“某个计算机特定的数据格式”转换为“网络通用的标准数据格式”后再发送出去。接收端主机收到数据以后将这些网络标准格式的数据恢复为“该计算机特定的数据格式”，然后再进行相应处理。</u></p>
+
+<p style="text-indent:2em">在前面这个例子中，由于数据被转换为通用标准的格式后再进行处理，使得异构的机型之间也能保持数据的一致性。这也正是表示层的作用所在。即<u>表示层是进行“统一的网络数据格式”与“某一台计算机或某一款软件特有的数据格式”之间相互转换的分层。</u></p>
+
+<p style="text-indent:2em">此例中的“早上好”这段文字根据其编码格式被转换成为了“统一的网络数据格式”。即便是一段简单的文字流，也可以有众多复杂的编码格式。就拿日语文字来说，有 EUC-JP、Shift_JS、IS0-2022-JP、UTF-8 以及 UTF-16 等很多编码格式。如果未能按照特定格式编码，那么在接收端就是收到邮件也<b><i>可能会是乱码</i></b>。</p>
+
+<p style="text-indent:2em"><u>表示层与表示层之间为了识别编码格式也会附加首部信息，从而将实际传输的数据转交给下一层去处理。</u></p>
+
+<p style="text-indent:2em"><i>注：</i>最典型的汉字编码格式有GB2312、BIG5、ISO8859-1等。</p>
+
+
+
+<p style="text-indent:2em"><b><i>会话层：</i></b></p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304111607459.png" alt="image-20230411160704418"></p>
+<center>--- 图 1.24 --- 会话层工作</center>
+
+<p style="text-indent:2em">下面，我们来分析在两端主机的会话层之间是如何高效地进行数据交互、采用何种方法传输数据的。</p>
+
+<p style="text-indent:2em">假定用户 A 新建了5封电子邮件准备发给用户 B。这5封邮件的发送顺序可以有很多种。例如，可以每发一封邮件时<b><i>建立一次连接</i></b>，随后断开连接。还可以一经建立好连接后就将5封邮件连续发送给对方。甚至可以同时建立好5个连接，将5封邮件同时发送给对方。<u>决定采用何种连接方法是会话层的主要责任。</u></p>
+
+<p style="text-indent:2em"><u>会话层也像应用层或表示层那样，在其收到的数据前端附加首部或标签信息后再转发给下一层。而这些首部或标签中记录着数据传送顺序的信息。</u></p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>非易失性存储器 ：数据不会因为断电而丢失的一种存储设备。闪存是目前使用最广泛的非易失性存储器。</p>
+<p>更关注数据的具体表现形式 ：最有名的就是每款计算机对数据在内存中相异的分配方式。最典型的是大实体和小实体。</p>
+<p>是极不方便的一件事情 ：现在，除了个人电脑，还有其他设备如智能手机也都能够连接到网络。如何让它们之间能够相互读取通信数据已变得越来越重要。</p>
+<p>可能会是乱码 ：在实际生活当中收发邮件成为乱码的情况并不罕见。这通常都是由于在表示层未能按照预期的编码格式运行或编码格式设置有误导致。</p>
+<p>建立一次连接 ：指通信连接。</p>
+<hr>
+<hr>
+<h3 id="1-6-3传输层以下的处理"><a href="#1-6-3传输层以下的处理" class="headerlink" title="1.6.3	传输层以下的处理"></a>1.6.3	传输层以下的处理</h3><p style="text-indent:2em">到此为止，我们通过例子说明了在应用层写入的数据会经由表示层格式化编码、再由会话层标记发送顺序后才被发送出去的大致过程。然而，会话层只对何时建立连接、何时发送数据等问题进行管理，并不具有实际传输数据的功能。真正负责在网络上传输具体数据的是会话层以下的“无名英雄”。</p>
+
+
+
+<p style="text-indent:2em"><b><i>传输层：</i></b></p>
+
+<p style="text-indent:2em">主机 A 确保与主机 B 之间的通信并准备发送数据。这一过程叫做“建立连接”。有了这个通信连接就可以使主机 A 发送的电子邮件到达主机 B 中，并由主机 B 的邮件处理程序获取最终数据。此外，当通信传输结束后，有必要将连接断开。</p>
+
+<p style="text-indent:2em">如上，<u><b><i>进行建立连接或断开连接的处理</i></b>，在两个主机之间创建逻辑上的通信连接即是传输层的主要作用</u>。此外，<u>传输层为确保所传输的数据到达目标地址，会在通信两端的计算机之间进行确认，如果数据没有到达，它会负责进行重发。</u></p>
+
+<p style="text-indent:2em">例如，主机 A 将“早上好”这一数据发送给主机 B。期间可能会因为某些原因导致数据被破坏，或由于发生某种网络异常致使只有一部分数据到达目标地址。假设主机 B 只收到了“早上”这一部分数据，那么它会在收到数据后将自己没有收到“早上”之后那部分数据的事实告知主机 A。主机 A 得知这个情况后就会将后面的“好”重发给主机 B,并再次确认对端是否收到。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304111622253.png" alt="image-20230411162213215"></p>
+<center>--- 图 1.25 --- 传输层的工作</center>
+
+<p style="text-indent:2em">这就好比人们日常会话中的确认语句：“对了，你刚才说什么来着？”计算机通信协议其实并没有想象中那么晦涩难懂，其基本原理是与我们的日常生活紧密相连、大同小异的。</p>
+
+<p style="text-indent:2em">由此可见，<u>保证数据传输的可靠性是传输层的一个重要作用。</u>为了确保可靠性，在这一层也会为所要传输的数据附加首部以识别这一分层的数据。然而，<u>实际上将数据传输给对端的处理是由网络层来完成的。</u></p>
+
+
+
+<p style="text-indent:2em"><b><i>网络层：</i></b></p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304111630313.png" alt="image-20230411163038272"></p>
+<center>--- 图 1.26 --- 网络层的工作</center>
+
+<p style="text-indent:2em"><u>网络层的作用是在网络与网络相互连接的环境中，将数据从发送端主机发送到接收端主机。</u>如图 1.27 所示，两端主机之间虽然有众多数据链路，但能够将数据从主机 A 送到主机 B 也都是网络层的功劳。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304111631107.png" alt="image-20230411163156068"></p>
+<center>--- 图 1.27 --- 网络层与数据链路层各尽其责</center>
+
+<p style="text-indent:2em">在实际发送数据时，目的地址至关重要。这个地址是进行通信的网络中唯一指定的序号。也可以把它想象为我们日常生活中使用的电话号码。只要这个目标地址确定了，就可以在众多计算机中选出该目标地址所对应的计算机发送数据。基于这个地址，就可以在网络层进行数据包的发送处理。而有了地址和网络层的包发送处理，就可以将数据发送到世界上任何一台互连设备。网络层中也会将其从上层收到的数据和地址信息等一起发送给下面的数据链路层，进行后面的处理。</p>
+
+
+
+<hr>
+<p style="text-indent:2em"><b><i>传输层与网络层的关系：</i></b></p>
+
+<p style="text-indent:2em">在不同的网络体系结构下，网络层有时也不能保证数据的可达性。例如在相当于 TCP/IP网络层的 IP 协议中，就不能保证数据一定会发送到对端地址。因此，数据传送过程中出现数据丢失、顺序混乱等问题可能性会大大增加。像这样没有可靠性传输要求的网络层中，可以由传输层负责提供“正确传输数据的处理”。TCP/IP 中，网络层与传输层相互协作以确保数据包能够传送到世界各地，实现可靠传输。</p>
+
+<p style="text-indent:2em">每个分层的作用与功能越清晰，规范协议的具体内容就越简单，实现这些具体协议的工作也将会更加轻松。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>数据链路层、物理层：</i></b></p>
+
+<p style="text-indent:2em">通信传输实际上是通过物理的传输介质实现的。<u>数据链路层的作用就是在这些通过传输介质互连的设备之间进行数据处理。</u></p>
+
+<p style="text-indent:2em">物理层中，将数据的0、1转换为电压和脉冲光传输给物理的传输介质，而相互直连的设备之间使用地址实现传输。这种地址被称为 <b><i>MAC</i></b> 地址，也可称为物理地址或硬件地址。采用 MAC 地址，目的是为了识别连接到同一个传输介质上的设备。因此，在这一分层中将包含 MAC 地址信息的首部附加到从网路层转发过来的数据上，将其发送到网络。</p>
+
+<p style="text-indent:2em"><u>网络层与数据链路层都是基于目标地址将数据发送给接收端的，但是网络层负责将整个数据发送给最终目标地址，而数据链路层则只负责发送一个分段内的数据。</u>关于这一点的更多细节可以参考 4.1.2 节。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304111639055.png" alt="image-20230411163957011"></p>
+<center>--- 图 1.28 --- 数据链路层与物理层的工作</center>
+
+
+
+<p style="text-indent:2em"><b><i>主机 B 端的操作：</i></b></p>
+
+<p style="text-indent:2em"><u>接收端主机 B 上的处理流程正好与主机 A 相反，它从物理层开始将接收到的数据逐层发给上一分层进行处理</u>，从而使用户 B 最终在主机 B 上使用邮件客户端软件接收用户 A 发送过来的邮件，并可以读取相应内容为“早上好”。</p>
+
+
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>进行建立连接或断开连接的处理 ：此处请注意，会话层负责决定建立连接和断开连接的时机，而传输层进行实际的建立和断开处理。</p>
+<p>MAC ：Media Access Control，介质访问控制。</p>
+<h2 id="1-7传输方式的分类"><a href="#1-7传输方式的分类" class="headerlink" title="1.7	传输方式的分类"></a><center>1.7	传输方式的分类</center></h2><hr>
+<h3 id="1-7-1面向有连接型和面向无连接型"><a href="#1-7-1面向有连接型和面向无连接型" class="headerlink" title="1.7.1	面向有连接型和面向无连接型"></a>1.7.1	面向有连接型和面向无连接型</h3><p style="text-indent:2em">通过网络发送数据，大致可以<b><i>分为面向有连接与面向无连接两种类型</i></b>。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304120944589.png" alt="image-20230412094427471"></p>
+<center>--- 图 1.29 --- 面向有连接型与面向无连接型</center>
+
+
+
+<p style="text-indent:2em"><b><i>面向有连接型：</i></b></p>
+
+<p style="text-indent:2em"><u>面向有连接型中，在<b><i>发送数据</i></b>之前，需要在收发主机之间<b><i>连接一条通信线路</i></b>。</u></p>
+
+<p style="text-indent:2em">面向有连接型就好比人们平常打电话，输入完对方电话号码拨出之后，只有对端拿起电话才能真正通话，通话结束后将电话机扣上就如同切断电源。因此<u>在面向有连接的方式下，必须在通信传输前后，专门进行建立和断开连接的处理。如果与对端之间无法通信，就可以避免发送无谓的数据。</u></p>
+
+
+
+<p style="text-indent:2em"><b><i>面向无连接型：</i></b></p>
+
+<p style="text-indent:2em"><u>面向无连接型则不要求建立和断开连接。<b><i>发送端可于任何时候自由发送数据</i></b>。反之，接收端也永远不知道自己会在何时从哪里收到数据。</u>因此，在面向无连接的情况下，<u>接收端需要时常确认是否收到了数据。</u></p>
+
+<p style="text-indent:2em">这就如同人们去邮局寄包裹一样。负责处理邮递业务的营业员，不需要确认收件人的详细地址是否真的存在，也不需要确认收件人是否能收到包裹，只要发件人有一个寄件地址就可以办理邮寄包裹的业务。面向无连接通信与电话通信不同，它不需要拨打电话、挂掉电话之类的处理，而是全凭发送端自由地发送自己想要传递出去的数据。</p>
+
+<p style="text-indent:2em">因此，<u>在面向无连接的通信中，不需要确认对端是否存在。即使接收端不存在或无法接收数据，发送端也能将数据发送出去。</u></p>
+
+
+
+<hr>
+<p style="text-indent:2em"><b><i>面向有连接与面向无连接：</i></b></p>
+
+<p style="text-indent:2em">“连接”这个词在人类社会当中，相当于“人脉”的意思。此时，它指熟人或有一定关系的人与人之间的联系。而面向无连接，其实就是没有任何关系的意思。</p>
+
+<p style="text-indent:2em">在棒球和高尔夫比赛中人们可能经常会听到“要到哪儿去得问球！”。这其实就是一个典型的面向无连接通信的发送端处理方式。或许有些读者可能会认为面向无连接的通信有点不靠谱。但是对于某些特殊设备，它却是一种非常有效率的方法。因为这种方式可以省略某些既定的、繁杂的手续，使处理变得简单，易于制作一些低成本的产品，减轻处理负担。</p>
+
+<p style="text-indent:2em">有时，也可以根据具体的通信内容来决定采用哪种方式——面向有连接或面向无连接。</p>
+
+<hr>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>分为面向有连接与面向无连接两种类型 ：面向无连接型包括以太网、IP、UDP 等协议。面向有连接型包括ATM、帧中继、TCP 等协议。</p>
+<p>发送数据 ：在面向有连接型的情况下，发送端的数据不一定要分组发送。第6章将要介绍的 TCP 是以面向有连接的方式分组发送数据的，然而1.7.2节中所要介绍的电路交换虽然也属于面向有连接的一种方式，但是数据却并不仅限于分组发送。</p>
+<p>连接一条通信线路 ：在不同的分层协议中，连接的具体含义可能有所不同。在数据链路层中的连接，就是指物理的、通信线路的连接。而传输层则负责创建与管理逻辑上的连接。</p>
+<p>发送端可于任何时候自由发送数据 ：面向无链接型采用分组交换(1,7.2)的情况要多一些。此时，可以直接将数据理解为分组数据。</p>
+<hr>
+<h3 id="1-7-2电路交换与分组交换"><a href="#1-7-2电路交换与分组交换" class="headerlink" title="1.7.2	电路交换与分组交换"></a>1.7.2	电路交换与分组交换</h3><p style="text-indent:2em">目前，<u>网络通信方式大致分为两种——电路交换和分组交换。</u>电路交换技术的历史相对久远，主要用于过去的电话网。而分组交换技术则是一种较新的通信方式，从20世纪60年代后半叶才开始逐渐被人们认可。本书着力介绍的 TCP/IP,正是采用了分组交换技术。</p>
+
+<p style="text-indent:2em"><u>在电路交换中，交换机主要负责数据的中转处理。计算机首先被连接到交换机上，而交换机与交换机之间则由众多通信线路再继续连接。因此计算机之间在发送数据时，需要通过交换机与目标主机建立通信电路。我们将连接电路称为建立连接。建立好连接以后，用户就可以一直使用这条电路，直到该连接被断开为止。</u></p>
+
+<p style="text-indent:2em">如果某条电路只是用来连接两台计算机的通信线路，就意味着只需在这两台计算机之间实现通信，因此这两台计算机是可以独占线路进行数据传输的。但是，如果一条电路上连接了多台计算机，而这些计算机之间需要相互传递数据，就会出现新的问题。鉴于一台计算机在收发信息时会独占整个电路，其他计算机只能等待这台计算机处理结束以后才有机会使用这条电路收发数据。并且在此过程中，谁也无法预测某一台计算机的数据传输从何时开始又在何时结束。如果并发用户数超过交换机之间的通信线路数，就意味着通信根本无法实现。</p>
+
+<p style="text-indent:2em">为此，人们想到了一个新的方法，即<u>让连接到通信电路的计算机将所要发送的数据分成多个数据包，按照一定的顺序排列之后分别发送。这就是分组交换。</u>有了分组交换，数据被细分后，所有的计算机就可以一齐收发数据，这样也就提高了通信线路的利用率。由于在分组的过程中，已经在每个分组的首部写入了发送端和接收端的地址，所以即使同一条线路同时为多个用户提供服务，也可以明确区分每个分组数据发往的目的地，以及它是与哪台计算机进行的通信。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304121058725.png" alt="image-20230412105835669"></p>
+<center>--- 图 1.30 --- 分组交换</center>
+
+<p style="text-indent:2em">在分组交换中，由分组交换机（路由器）连接通信线路。<u>分组交换的大致处理过程是：发送端计算机将数据分组发送给路由器，路由器收到这些分组数据以后，缓存到自己的缓冲区，然后再转发给目标计算机。因此，分组交换也有另一个名称：蓄积交换。</u></p>
+
+<p style="text-indent:2em"><u>路由器接收到数据以后会按照顺序缓存到相应的队列当中，再以先进先出的顺序将它们<b><i>逐一发送出去</i></b>。</u></p>
+
+<p style="text-indent:2em">在分组交换中，计算机与路由器之间以及路由器与路由器之间通常只有一条通信线路。因此，这条线路其实是一条共享线路。在电路交换中，计算机之间的传输速度不变。然而在分组交换中，通信线路的速度可能会有所不同。根据网络拥堵的情况，数据达到目标地址的时间有长有短。另外，路由器的缓存饱和或溢出时，甚至可能会发生分组数据丢失、无法发送到对端的情况。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304121217677.png" alt="image-20230412121708620"></p>
+<center>--- 图 1.31 --- 电路交换与分组交换的特点</center>
+
+
+
+<hr>
+<h3 id="1-7-3-根据接收端数量分类"><a href="#1-7-3-根据接收端数量分类" class="headerlink" title="1.7. 3 	根据接收端数量分类"></a>1.7. 3 	根据接收端数量分类</h3><p style="text-indent:2em">网络通信当中，也可以根据目标地址的个数及其后续的行为对通信进行分类。如广播、多播等就是这种分类的产物。</p>
+
+
+
+<p style="text-indent:2em"><b><i>单播（Unicast）：</i></b></p>
+
+<p style="text-indent:2em">字面上，“Uni”表示“1”，“Cast”意为“投掷”。组合起来就是指1对1通信。早先的固定电话就是单播通信的一个典型例子。</p>
+
+
+
+<p style="text-indent:2em"><b><i>广播（Broadcast）：</i></b></p>
+
+<p style="text-indent:2em">字面上具有“播放”之意。因此它指是将消息从1台主机发送给与之相连的所有其他主机。广播通信的一个典型例子就是电视播放，它将电视信号一齐发送给非特定的多个接收对象。</p>
+
+<p style="text-indent:2em">此外，我们知道电视信号一般都有自己的频段。只有在相应频段的可接收范围内才能收到电视信号。与之类似，进行广播通信的计算机也有它们的广播范围。只有在这个范围之内的计算机才能收到相应的广播消息。这个范围叫做广播域。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304121233242.png" alt="image-20230412123355168"></p>
+<center>--- 图 1.32 --- 单播、广播、组播、任播</center>
+
+
+
+<p style="text-indent:2em"><b><i>多播（Multicast）：</i></b></p>
+
+<p style="text-indent:2em">多播与广播类似，也是将消息发给多个接收主机。不同之处在于多播要限定某一组主机作为接收端。多播通信最典型的例子就是电视会议，这是由多组人在不同的地方参加的一种远程会议。在这种形式下，会由一台主机发送消息给特定的多台主机。电视会议通常不能使用广播方式。否则将无从掌握是谁在哪儿参与电视会议。</p>
+
+
+
+<p style="text-indent:2em"><b><i>任播（Anycast）：</i></b></p>
+
+<p style="text-indent:2em">任播是指在特定的多台主机中选出一台作为接收端的一种通信方式。虽然，这种方式与多播有相似之处，都是面向特定的一群主机，但是它的行为却与多播不同。任播通信从目标主机群中选择一台最符合网络条件的主机作为目标主机发送消息。通常，所被选中的那台特定主机将返回一个单播信号，随后发送端主机会只跟这台主机进行通信。</p>
+
+<p style="text-indent:2em">任播在实际网络中的应用有DNS根域名解析服务器。</p>
+
+
+
+<hr>
+<h2 id="1-8-地址"><a href="#1-8-地址" class="headerlink" title="1.8 	地址"></a><center>1.8 	地址</center></h2><p style="text-indent:2em">通信传输中，发送端和接收端可以被视为通信主体。它们都能由一个所谓“地址”的信息加以标识出来。当人们使用电话时，电话号码就相当于“地址”。当人们选择写信时，通信地址加上姓名就相当于“地址”。</p>
+
+<p style="text-indent:2em">现实生活当中的“地址”比较容易理解，然而在计算机通信当中，这种地址的概念显得要复杂一些。因为在实际的网络通信当中，每一层的协议所使用的地址都不尽相同。例如，TCP/IP 通信中使用 MAC 地址(3.2.1节)、IP 地址(4.2.1节)、端口号(6.2节)等信息作为地址标识。甚至在应用层中，可以将电子邮件地址(8.4.2节)作为网络通信的地址。</p>
+
+<hr>
+<h3 id="1-8-1地址的唯一性"><a href="#1-8-1地址的唯一性" class="headerlink" title="1.8.1	地址的唯一性"></a>1.8.1	地址的唯一性</h3><p style="text-indent:2em">如果想让地址在通信当中发挥作用，首先需要确定通信的主体。<u>一个地址必须明确地表示一个主体对象。在同一个通信网络中不允许有两个相同地址的通信主体存在。这也就是地址的唯一性。</u></p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304121252342.png" alt="image-20230412125210300"></p>
+<center>--- 图 1.33 --- 地址的唯一性</center>
+
+<p style="text-indent:2em">到此为止，读者可能会有一个疑问。前面提到，在同一个通信网络中不允许有两个相同地址的通信主体存在。这在单播通信中还好理解，因为通信两端都是单一的主机。那么对于广播、多播、任播通信该如何理解呢？岂不是通信接收端都被赋予了同一个地址？其实，在某种程度上，这样理解有一定的合理性。在上述这些通信方式中，接收端设备可能不止一个。为此，可以对这些由多个设备组成的一组通信赋予同一个具有唯一特性的地址，从而可以避免产生歧义，明确接收对象。</p>
+
+<p style="text-indent:2em">举个简单的多播的例子。某位老师说：“一年一班的同学们请起立！”其中，“一年一班”实际上就明确地指代了目标对象。此时，“一年一班”就是这一次“多播”的目标地址，具有唯一性。</p>
+
+<p style="text-indent:2em">再举一个任播的例子。老师又说：“一年一班的哪位同学过来把你们班的学习资料取走！”此时“一年一班的哪位同学”（任意一位同学）就成为了此次“任播”的目标地址，具有唯一性。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304121913192.png" alt="image-20230412191300132"></p>
+<center>--- 图 1.34 --- 多播与任播地址的唯一性</center>
+
+
+
+<hr>
+<h3 id="1-8-2地址的层次性"><a href="#1-8-2地址的层次性" class="headerlink" title="1.8.2	地址的层次性"></a>1.8.2	地址的层次性</h3><p style="text-indent:2em">当地址总数并不是很多的情况下，有了唯一地址就可以定位相互通信的主体。然而，当地址的总数越来越多时，如何高效地从中找出通信的目标地址将成为一个重要的问题。为此人们发现地址除了具有唯一性还需要具有层次性。其实，在使用电话和信件通信的过程当中，早已有了地址分层这种概念。例如，电话号码包含国家区号和国内区号，通信地址包含国名、省名、市名和区名等。正是有了这种层次分类才能更加快速地定位某一个地址。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304121915096.png" alt="image-20230412191544055"></p>
+<center>--- 图 1.35 --- 地址的层次性</center>
+
+<p style="text-indent:2em"><u>MAC 地址和 IP 地址在标识一个通信主体时虽然都具有唯一性，但是它们当中只有 IP 地址具有层次性。</u></p>
+
+<p style="text-indent:2em">MAC 地址由设备的制造厂商针对每块<b><i> 网卡 </i></b>进行分别指定。人们可以通过制造商识别号、制造商内部产品编号以及产品通用编号确保 MAC 地址的唯一性。然而，人们无法确定哪家厂商的哪个网卡被用到了哪个地方。虽然 MAC 地址中的制造商识别号、产品编号以及通用编号等信息在某种程度上也具有一定的层次性，但是对于寻找地址并没有起到任何作用，所以不能算作有层次的地址。正因如此，虽然 MAC 地址是真正负责最终通信的地址，但是在实际寻址过程中，IP 地址却必不可少。</p>
+
+<p style="text-indent:2em">那么 IP 地址又是怎样实现分层的呢？一方面，<u>IP 地址由网络号和主机号两部分组成。即使通信主体的 IP 地址不同，若主机号不同，网络号相同，说明它们处于同一个网段。</u>通常，同处一个网段的主机也都属于同一个部门或集团组织。另一方面，<u>网络号相同的主机在组织结构、提供商类型和地域分布上都比较集中，也为 IP 寻址带来了极大的方便。</u>这也是为什么说 IP 地址具有层次性的原因。</p>
+
+<p style="text-indent:2em">网络传输中，每个节点会根据分组数据的地址信息，来判断该报文应该由哪个网卡发送出去。为此，各个地址会参考一个发出接口列表。在这一点上 MAC 寻址与 IP 寻址是一样的。只不过 MAC 寻址中所参考的这张表叫做<b><i>地址转发表</i></b>，而 IP 寻址中所参考的叫做<b><i>路由控制表</i></b>。MAC 地址转发表中所记录的是实际的 MAC 地址本身，而路由表中记录的 IP 地址则是集中了之后的<b><i>网络号</i></b>。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304121925007.png" alt="image-20230412192551938"></p>
+<center>--- 图 1.36 --- 根据地址转发表与路由表定位报文发送的目标设备</center>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>网卡 ：NIC （Network Interface Card）,也叫网卡，是计算机连网时所使用的部件。</p>
+<p>地址转发表、路由控制表 ：目前，地址转发表和路由控制表并不需要在网络中的各个节点上手动设置，而是由这些节点自动生成的。地址转发表根据自学(3.2.4节)自动生成。路由控制表则根据路由协议（第7章）自动生成。</p>
+<p>网络号 ：确切的说，是网络号与子网掩码。</p>
+<h2 id="1-9网络的构成要素"><a href="#1-9网络的构成要素" class="headerlink" title="1.9	网络的构成要素"></a><center>1.9	网络的构成要素</center></h2><p style="text-indent:2em">搭建一套网络环境要涉及各种各样的电缆和网络设备。在此仅介绍连接计算机与计算机的硬件设备。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131019473.png" alt="image-20230413101902837"></p>
+<center>--- 图 1.37 --- 网络构成要素</center>
+
+<table>
+<thead>
+<tr>
+<th align="center">设备</th>
+<th align="center">作用</th>
+<th align="center">介绍章节</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">网卡</td>
+<td align="center">使计算机连网的设备（Network Interface）</td>
+<td align="center">1.9.2</td>
+</tr>
+<tr>
+<td align="center">中继器（Repeater）</td>
+<td align="center">从物理层上延长网络的设备</td>
+<td align="center">1.9.3</td>
+</tr>
+<tr>
+<td align="center">网桥（Bridge）&#x2F; 2层交换机</td>
+<td align="center">从数据链路层上延长网络的设备</td>
+<td align="center">1.9.4</td>
+</tr>
+<tr>
+<td align="center">路由器（Router）&#x2F; 3层交换机</td>
+<td align="center">通过网络层转发分组数据的设备</td>
+<td align="center">1.9.5</td>
+</tr>
+<tr>
+<td align="center">4 ~ 7 层交换机</td>
+<td align="center">处理传输层以上各层网络传输的设备</td>
+<td align="center">1.9.6</td>
+</tr>
+<tr>
+<td align="center">网关（Gateway）</td>
+<td align="center">转换协议的设备</td>
+<td align="center">1.9.7</td>
+</tr>
+</tbody></table>
+<center>--- 表 1.3 --- 搭建网络的主要设备及其作用</center>
+
+
+
+<hr>
+<h3 id="1-9-1通信媒介与数据链路"><a href="#1-9-1通信媒介与数据链路" class="headerlink" title="1.9.1	通信媒介与数据链路"></a>1.9.1	通信媒介与数据链路</h3><p style="text-indent:2em">计算机网络是指计算机与计算机相连而组成的网络。那么现实当中计算机之间又是怎样连接的呢？</p>
+
+<p style="text-indent:2em">计算机之间通过电缆相互连接。电缆可以分为很多种，包括双绞线电缆、光纤电缆、同轴电缆、串行电缆等。根据 <b><i>数据链路 </i></b>的不同选用的电缆类型也不尽相同。而媒介本身也可以被划分为电波、微波等不同类型的电磁波。表 1.4 总结了各种不同的数据链路、通信媒介及其标准传输速率。</p>
+
+<table>
+<thead align="center">
+  <tr>
+    <th>数据链路名</th>
+    <th>通信媒介</th>
+    <th>传输速率</th>
+    <th>主要用途</th>
+  </tr>
+</thead>
+<tbody align="center">
+  <tr>
+    <td rowspan="3" valign="middle">以太网</td>
+    <td>同轴电缆</td>
+    <td>10 Mbps</td>
+    <td>LAN</td>
+  </tr>
+  <tr>
+    <td>双绞线电缆</td>
+    <td>10 Mbps ~ 100 Gbps</td>
+    <td>LAN</td>
+  </tr>
+  <tr>
+    <td>光纤电缆</td>
+    <td>10 Mbps ~ 100 Gbps</td>
+    <td>LAN</td>
+  </tr>
+  <tr>
+    <td>无线</td>
+    <td>电磁波</td>
+    <td>数个 Mbps ~</td>
+    <td>LAN ~ WAN</td>
+  </tr>
+  <tr>
+    <td rowspan="3">ATM</td>
+    <td rowspan="3">双绞线电缆、光纤电缆</td>
+    <td>25Mbps</td>
+    <td rowspan="3">LAN ~ WAN</td>
+  </tr>
+  <tr>
+    <td>155 Mbps</td>
+  </tr>
+  <tr>
+    <td>622 Mbps</td>
+  </tr>
+  <tr>
+    <td rowspan="2">FDDI</td>
+    <td>光纤电缆</td>
+    <td rowspan="2">100 Mbps</td>
+    <td rowspan="2">LAN ~ WAN</td>
+  </tr>
+  <tr>
+    <td>双绞线电缆</td>
+  </tr>
+  <tr>
+    <td rowspan="2">帧中继</td>
+    <td>双绞线电缆</td>
+    <td rowspan="2">约 64 k ~ 1.5 Mbps</td>
+    <td rowspan="2">WAN</td>
+  </tr>
+  <tr>
+    <td>光纤电缆</td>
+  </tr>
+  <tr>
+    <td rowspan="2">ISDN</td>
+    <td>双绞线电缆</td>
+    <td rowspan="2">64 k ~ 1.5 Mbps</td>
+    <td rowspan="2">WAN</td>
+  </tr>
+  <tr>
+    <td>光纤电缆</td>
+  </tr>
+</tbody>
+</table>
+
+<center>--- 表 1.4 --- 各种数据链路一览</center>
+
+<hr>
+<p style="text-indent:2em"><b><i>传输速率与吞吐量：</i></b></p>
+
+<p style="text-indent:2em">在数据传输的过程中，<u>两个设备之间数据流动的物理速度称为传输速率。</u>单位为 bps(Bits Per Second,每秒比特数)。从严格意义上讲，各种传输媒介中信号的流动速度是恒定的。因此，即使数据链路的传输速率不相同，也<b><i>不会出现传输的速度忽快忽慢的情况</i></b>。<u>传输速率高也不是指单位数据流动的速度有多快，而是指单位时间内传输的数据量有多少。</u></p>
+
+<p style="text-indent:2em">以我们生活中的道路交通为例，低速数据链路就如同车道较少无法让很多车同时通过的情况。与之相反，高速数据链路就相当于有多个车道，一次允许更多车辆行驶的道路。<u>传输速率又称作带宽(Bandwidth)。带宽越大网络传输能力就越强。</u></p>
+
+<p style="text-indent:2em">此外，<u>主机之间实际的传输速率被称作吞吐量。</u>其单位与带宽相同，都是 bps(Bits Per Second)。吞吐量这个词不仅衡量带宽，同时也衡量主机的 CPU 处理能力、网络的拥堵程度、报文中数据字段的占有份额（不含报文首部，只计算数据字段本身)等信息</p>
+
+<hr>
+<hr>
+<p style="text-indent:2em"><b><i>网络设备之间的连接：</i></b></p>
+
+<p style="text-indent:2em">网络设备之间的相互连接需要遵循类似于某种“法律”的规范和业界标准。这对搭建网络环境至关重要。如果每个不同的厂商，在生产各种网络设备时都使用各自独有的传输媒介和协议，那么这些设备就无法与其他厂商的设备或网络进行连接。为此，人们制定了统一的协议和规格。每个生产厂家都必须严格按照规格出产相应的网络设备，否则会导致自身的产品无法与其他网络设备兼容，或易出故障等问题。</p>
+
+<p style="text-indent:2em">然而，制定规范往往是一个长期的过程，在这一过程的技术过渡期间人们难免总会遇到些“兼容性”问题。特别是在 ATM、前兆以太网(Gigabit Ethernet)、无线 LAN 等新技术诞生初期，这一点尤为突出。不同厂商的网络设备之间相互连接时经常会发生一些问题。随着时间的推移，这一点虽然已经有所改善，但是仍然无法达到100%兼容。</p>
+
+
+
+<p style="text-indent:2em">因此，在实际搭建网络时，不仅应该关注每款产品的规格参数，还应该了解它们的兼容性，并且更应该重视参考这些产品在实际长期使用过程当中所呈现的<b><i>性能指标</i></b>。如果没有做充分调查就抢先使用了运行性能不高的新产品，那么后果将不堪设想。</p>
+
+<hr>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>不会出现传输的速度忽快忽慢的情况 ：因为光和电流的传输速度是恒定的。</p>
+<p>性能指标 ：性能指标好的技术也被称作 “成熟的技术”。它是指经过市场和使用者一段时间的考验、积累了相当多实战经验的技术。</p>
+<hr>
+<h3 id="1-9-2网卡"><a href="#1-9-2网卡" class="headerlink" title="1.9.2	网卡"></a>1.9.2	网卡</h3><p style="text-indent:2em"><u>任何一台计算机连接网络时，必须要使用网卡（全称为网络接口卡）。网络接口卡（ <b><i>NIC</i></b> ）有时也被叫做网络适配器、网卡、LAN卡。</u></p> 
+
+<p style="text-indent:2em">最近，很多产品目录中都加入了“内置LAN端口”的参数，说明越来越多的计算机在出厂设置中就具备了以太网(Ethernet)1000BASE-T 或 100BASE-TX 的<b><i>端口</i></b>。没有配置 NIC 的计算机如果想接人以太网，至少得外接一个扩展槽以便插入 NIC。无线局域网的情况下也是如此，计算机必须具备能够接入无线网的 NIC 才能保证连接到网络。笔记本电脑如果没有内置的 NIC,可以通过 <b><i>ExpressCard</i></b> 或CardBus、压缩闪存以及 USB 方式插一块 NIC 以后再连网。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131145127.png" alt="image-20230413114505047"></p>
+<center>--- 图 1.38 --- 网卡</center>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>NIC ：集成了连接局域网功能的设备。有时会被集成到计算机的主板中，有时也可以单独插入扩展槽使用。Network Infornation Center的缩写也是 NIC ,所以要注意区分。</p>
+<p>端口 ：计算机与外部连接的接口称作计算机端口。</p>
+<p>ExpressCard ：笔记本电中的卡型扩展设备。由制定 PC 卡标准的 PCMCIA （Personal Computer Memory Card International Association , PC 机内存卡国际联合会）统一规格。</p>
+<hr>
+<h3 id="1-9-3中继器"><a href="#1-9-3中继器" class="headerlink" title="1.9.3	中继器"></a>1.9.3	中继器</h3><p style="text-indent:2em"><u>中继器（Repeater）是在 OSI 模型的第1层——物理层面上延长网络的设备。由电缆传过来的电信号或光信号经由中继器的波形调整和放大再传给另一个电缆。</u></p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131148018.png" alt="image-20230413114817922"></p>
+<center>--- 图 1.39 --- 中继器</center>
+
+<p style="text-indent:2em"><u>一般情况下，中继器的两端连接的是相同的通信媒介，但有的中继器也可以完成不同媒介之间的转接工作。</u>例如，可以在同轴电缆与光缆之间调整信号。然而，在这种情况下，中继器也只是单纯负责信号在0和1比特流之间的替换，并不负责判断数据是否有错误。同时，它只负责将电信号转换为光信号，因此<b><i>不能在传输速度不同的媒介之间转发</i></b>。</p>
+
+<p style="text-indent:2em"><u>通过中继器而进行的网络延长，其距离也并非可以无限扩大。</u>例如一个 10Mbps 的以太网最多可以用4个中继器分段连接，而一个 100Mbps 的以太网则最多只能连两个中继器。</p>
+
+<p style="text-indent:2em"><u>有些中继器可以提供多个端口服务。这种中继器被称作中继集线器或集线器。</u>因此，<b><i>集线器 </i></b>也可以看作是多口中继器，每个端口都可以成为一个中继器。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131711401.png" alt="image-20230413171159365"></p>
+<center>--- 图 1.40 --- 集线器</center>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>不能在传输速度不同的媒介之间转发 ：用中继器无法连接一个100 Mbps 的以太网和另一个10 Mbps 的以太网。连接两个不同速度的网络需要的是网桥或路由器这样的设备。</p>
+<p>集线器 ：中继集线器也可以简称为集线器或 Hub。但现在人们常说的Hub更多是指1.9.4节所要介绍的交换式集线器。</p>
+<hr>
+<h3 id="1-9-4网桥-x2F-2层交换机"><a href="#1-9-4网桥-x2F-2层交换机" class="headerlink" title="1.9.4	网桥 &#x2F; 2层交换机"></a>1.9.4	网桥 &#x2F; 2层交换机</h3><p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131722362.png" alt="image-20230413172248323"></p>
+<center>--- 图 1.41 --- 网桥</center>
+
+<p style="text-indent:2em"><u>网桥是在 OSI 模型的第2层一数据链路层面上连接两个网络的设备。它能够识别数据链路层中的<b><i>数据帧</i></b>，并将这些数据帧临时存储于内存，再重新生成信号作为一个全新的帧转发给相连的另一个<b><i>网段</i></b>。由于能够存储这些数据帧，网桥能够连接 10BASE-T 与 100BASE-TX 等传输速率完全不同的数据链路，并且不限制连接网段的个数。</u></p>
+
+<p style="text-indent:2em"><u>数据链路的数据帧中有一个数据位叫做<b><i> FCS </i></b>,用以校验数据是否正确送达目的地。网桥通过检查这个域中的值，将那些损坏的数据丢弃，从而避免发送给其他的网段。此外，网桥还能通过地址自学机制和过滤功能控制<b><i>网络流量</i></b>。</u></p>
+
+<p style="text-indent:2em">这里所说的地址是指 MAC 地址、硬件地址、物理地址以及适配器地址，也就是网络上针对 NIC 分配的具体地址。如图 1.42 所示，主机 A 与主机 B 之间进行通信时，只针对主机 A 发送数据帧即可。网桥会根据地址自学机制来判断是否需要转发数据帧。</p>
+
+<p style="text-indent:2em">这类功能是OSI参考模型的第2层（数据链路层）所具有的功能。为此，<u>有时也把网桥称作2层交换机(L2交换机)。</u></p>
+
+<p style="text-indent:2em"><u>有些网桥能够判断是否将数据报文转发给相邻的网段，这种网桥被称作自学式网桥。这类网桥会记住曾经通过自己转发的所有数据帧的 MAC 地址，并保存到自己里的内存表中。</u>由此，可以判断哪个网段中包含持有哪类 MAC 地址的设备。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131828370.png" alt="image-20230413182813324"></p>
+<center>--- 图 1.42 --- 自学式网桥</center>
+
+<p style="text-indent:2em">以太网等网络中经常使用的交换集线器( <b><i>Hub</i></b> ),现在基本也属于网桥的一种。交换集线器中连接电缆的每个端口都能提供类似网桥的功能。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131830046.png" alt="image-20230413183031006"></p>
+<center>--- 图 1.43 --- 交换集线器是网桥的一种</center>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>数据帧 ：与分组数据意思大致相同，但是在数据链路层中通常习惯称为帧。具体可参考2.5.1节。</p>
+<p>网段 ：具有分割、划分网络之意，详细内容可参考3.1节。此外，在 TCP 中也可以表示数据。具体可参考2.5.1节的专栏。</p>
+<p>FCS ：CRC （Cyclic Redundancy Check，循环冗余校验码）方式校验数据帧中的位。有时由于噪音导致通信传输当中数据<br>信号越来越弱，而这种 CRC 正是用来检查数据帧是否因此而受到破坏的。</p>
+<p>网络流量 ：网络上传输的数据报文的数量。</p>
+<p>Hub ：具有网桥功能的 Hub 叫做交换集线器。只有中继器功能的 Hub 叫做集线器。</p>
+<hr>
+<h3 id="1-9-5路由器-x2F-3层交换机"><a href="#1-9-5路由器-x2F-3层交换机" class="headerlink" title="1.9.5	路由器 &#x2F;  3层交换机"></a>1.9.5	路由器 &#x2F;  3层交换机</h3><p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131854279.png" alt="image-20230413185428239"></p>
+<center>--- 图 1.44 --- 路由器</center>
+
+<p style="text-indent:2em"><u>路由器是在 OSI 模型的第3层——网络层面上连接两个网络、并对分组报文进行转发的设备。网桥是根据物理地址（ MAC 地址）进行处理，而路由器/3层交换机则是根据 IP 地址进行处理的。</u>由此，TCP/IP 中网络层的地址就成为了 IP 地址。</p>
+
+<p style="text-indent:2em"><u>路由器可以连接不同的数据链路。</u>例如连接两个以太网，或者连接一个以太网与一个 FDDI。现在，人们在家或办公室里连接互联网时所使用的宽带路由器也是路由器的一种。</p>
+
+<p style="text-indent:2em"><u>路由器还有<b><i>分担网络负荷的作用</i></b>，甚至有些路由器具备一定的网络安全功能</u>。因此，在连接网络与网络的设备当中，路由器起着极为重要的作用。</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>分担网络负荷的作用 ：由于路由器会分割数据链路，因此数据链路层的广播消息将无法继续传播。</p>
+<hr>
+<h3 id="1-9-64-7-层交换机"><a href="#1-9-64-7-层交换机" class="headerlink" title="1.9.6	4 ~ 7 层交换机"></a>1.9.6	4 ~ 7 层交换机</h3><p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131901722.png" alt="image-20230413190130688"></p>
+<center>--- 图 1.45 --- 4 ~ 7 层交换机</center>
+
+
+
+<p style="text-indent:2em"><u>4 ~ 7 层交换机负责处理 OSI 模型中从传输层至应用层的数据。</u>如果用 TCP/IP 分层模型来表述，<u>4 ~ 7 层交换机就是以 TCP 等协议的传输层及其上面的应用层为基础，分析收发数据，并对其进行特定的处理。</u></p>
+
+<p style="text-indent:2em">例如，对于并发访问量非常大的一个<b><i>企业级 Web 站点</i></b>，使用一台服务器不足以满足前端的访问需求，这时通常会架设多台服务器来分担。这些服务器前端访问的入口地址通常只有一个（企业为了使用者的方便，只会向最终用户开放一个统一的访问 URL ）。<u>为了能通过同一个 URL 将前端访问分发到后台多个服务器上，可以在这些服务器的前端加一个负载均衡器。<b><i>这种负载均衡器就是4~7层交换机的一种</i></b>。</u></p>
+
+<p style="text-indent:2em">此外，实际通信当中，<u>人们希望在网络比较拥堵的时候，优先处理像语音这类对及时性要求较高的通信请求，放缓处理像邮件或数据转发等稍有延迟也并无大碍的通信请求。这种处理被称为带宽控制，也是4~7层交换机的重要功能之一.</u></p>
+
+<p style="text-indent:2em">除此之外，4 ~ 7 层交换机的应用场景还有很多。例如广域网加速器、特殊应用访问加速以及防火墙（可以防止互联网上的非法访问）等。</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>企业级 Web 站点 ：由URL（参考8.5.3节）指定的连接到互联网的一台或一群服务器。目前根据信息内容可分为游戏站点、资源下载站点以及Web站点等多种类型。</p>
+<p>这种负载均衡器就是4~7层交换机的一种 ：此外还可以通过 DNS（参考5.2节）实现负载均衡。通过对多个 IP 地址配置同一个名字，每次查询到这个名字的客户得到其中的某一个地址，从而使不同客户访问不同的服务器。该方法也称作循环复用 DNS 技术。</p>
+<hr>
+<h3 id="1-9-7网关"><a href="#1-9-7网关" class="headerlink" title="1.9.7	网关"></a>1.9.7	网关</h3><p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131925093.png" alt="image-20230413192557054"></p>
+<center>--- 图 1.46 --- 网关</center>
+
+<p style="text-indent:2em"><u>网关是 OSI 参考模型中负责将从传输层到应用层的数据进行转换和转发的设备。它与 4 ~ 7 层交换机一样都是处理传输层及以上的数据，但是网关不仅转发数据还负责对数据进行转换，它通常会使用一个表示层或应用层网关，在两个不能进行直接通信的协议之间进行翻译，最终实现两者之间的通信。</u></p>
+
+<p style="text-indent:2em">一个非常典型的例子就是互联网邮件与手机邮件之间的转换服务。手机邮件有时可能会与互联网邮件互不兼容，这是由于它们在表示层和应用层中的“电子邮件协议”互不相同所导致的。</p>
+
+<p style="text-indent:2em">那么，为什么连到互联网的电脑与手机之间能够互发电子邮件呢？如图 1.47 所示，互联网与手机之间设置了一道网关。网关负责读取完各种不同的协议后，对它们逐一进行合理的转换，再将相应的数据转发出去。这样一来即使应用的是不同电子邮件的协议，计算机与手机之间也能互相发送邮件。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131945471.png" alt="image-20230413194502426"></p>
+<center>--- 图 1.47 --- 手机与互联网电子邮件的转换</center>
+
+<p style="text-indent:2em">此外，在使用 WWW（World Wide Web,万维网）时，为了控制网络流量以及出于安全的考虑，有时会使用代理服务器(Proxy Server)。<u>这种代理服务器也是网关的一种，称为应用网关。有了代理服务器，客户端与服务器之间无需在网络层上直接通信，而是从传输层到应用层对数据和访问进行各种控制和处理。防火墙就是一款通过网关通信，针对不同应用提高安全性的产品。</u></p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131947262.png" alt="image-20230413194711217"></p>
+<center>--- 图 1.48 --- 代理服务</center>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304131947418.png" alt="image-20230413194759365"></p>
+<center>--- 图 1.49 --- 各种设备及其对应网络的分层概览</center>
+
+
+
+
+
+
+<h2 id="1-10现代网络实态"><a href="#1-10现代网络实态" class="headerlink" title="1.10	现代网络实态"></a><center>1.10	现代网络实态</center></h2><h3 id="1-10-1网络的构成"><a href="#1-10-1网络的构成" class="headerlink" title="1.10.1	网络的构成"></a>1.10.1	网络的构成</h3><p style="text-indent:2em">首先，我们以交通道路为例说明现实当中的网配置。</p>
+
+<p style="text-indent:2em">每座大型城市的道路交通网中，或多或少都分布着高速公路。在计算机网络中有类似高速公路的部分，人们称为“骨干”或“核心”。正如其名，它们是计算机网络的中心。人们通常会选用高速路由器相互连接使之快速传输大量数据。</p>
+
+<p style="text-indent:2em"><u>网络中相应于高速公路出入口的部分被称作“ <b><i>边缘网络</i></b> ”。</u>常用的设备有 <b><i>多功能路由器</i></b> 和3层交换机。</p>
+
+<p style="text-indent:2em">高速公路的出入口通常连接国道、省道，从而可以通往市区街道。<u>计算机网络中连接“边缘网络”的部分叫做“接入层”或“汇聚层”。</u>这样，骨干网可以专注于如何提高业务传输性能和网络的生存性，而将具有业务智能化的高速路由器和交换机移到网络的边缘。边缘网络的常用设备多为2层交换机或3层交换机。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304141648067.png" alt="image-20230414164846913"></p>
+<center>--- 图 1.50 --- 网络整体组成</center>
+
+<hr>
+<p style="text-indent:2em"><b><i>网络的物理组成与逻辑组成：</i></b></p>
+
+<p style="text-indent:2em">在道路交通中，由于季节、时间等原因经常发生堵车、限行等事件。计算机网中也是如此，同样会发生网络拥堵、传输时慢时快的现象。</p>
+
+<p style="text-indent:2em">在实际道路交通中，为了解决堵车的问题，通常可以采用增建新的路段或由交警指挥绕行等方法。把这种方法代入到计算机网路中，就相当于增加通信电缆扩大物理层。</p>
+
+<p style="text-indent:2em">然而计算机的网络通信不仅仅在物理线路上进行，还会在其上层的逻辑信道上进行传输。正因为如此，如果在搭建网络的时候事先做好准备，就可以根据虚拟逻辑信道，按需调整宽度。</p>
+
+<p style="text-indent:2em">例如，假如要从名古屋出发驾车到东京，在东名高速途中遇到严重堵车时，可以改道走中央高速或北陆道与关越路避免堵车。这时如果将“东名高速”想象为“从名古屋出发到达东京的高速公路”，那么不论是真的走了东名高速还是改道走中央高速都可以认为是走了“东名高速”。在现代计算机网络中，高速光纤通信与高性能通信设备之间的延迟已经越来越小。就拿日本国内的网络来说，不管选用哪个信道都不会有明显的延迟。甚至，人们根本就<b><i>感觉不到邮件或文件传输的延迟</i></b>。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304141657270.png" alt="image-20230414165734154"></p>
+<center>--- 图 1.51 ---物理线路与逻辑信道</center>
+
+<hr>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>边缘网络 ：所谓边缘网络是一个及其松散的概念，目前还没有一个统一的说法。可以理解为涉及接入层和汇聚层的网络。</p>
+<p>多功能路由器 ：在路由器最基本的功能之上增加了按顺序&#x2F;种类发送数据的功能，可以根据 TCP&#x2F;IP 层的协议变换处理方法。</p>
+<p>感觉不到邮件或文件传输的延迟 ：连接国外网络或者连接跨域较广的网络时，有时可能会感觉“慢”。其原因包括线路传输速率慢、多网段连接或长距离连接等。</p>
+<hr>
+<h3 id="1-10-2互联网通信"><a href="#1-10-2互联网通信" class="headerlink" title="1.10.2	互联网通信"></a>1.10.2	互联网通信</h3><p style="text-indent:2em">让我们再详细解读一下实际的网络是如何构成的。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304141705321.png" alt="image-20230414170510217"></p>
+<center>--- 图 1.52 --- 互联网服务</center>
+
+<p style="text-indent:2em">人们在家里或公司连接互联网时，一般会使用互联网接入服务。联网之后，汇集到无线局域网路由器和最近交换机的通信<b><i>会再次被连接到前面所提到的“ 接入层 ”</i></b>。甚至还有可能通过“边缘网络”或“主干网”实现与目标地址之间的通信。</p>
+
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>会再次被连接到前面所提到的“ 接入层 ” ：在公司规模较大、网络使用者较多，或者从外部有大量的访问进入的情况下，有时可以直接连接到“边缘网络”。</p>
+<hr>
+<h3 id="1-10-3移动通信"><a href="#1-10-3移动通信" class="headerlink" title="1.10.3	移动通信"></a>1.10.3	移动通信</h3><p style="text-indent:2em">手机一开机，就会自动与距离最近的基站发生无线通信。基站上设有特定手机基站天线，基地本身也相当于网络的“接入层”。</p>
+
+<p style="text-indent:2em">由一部手机终端发送信号给另一个终端时，它所发出的请求会一直传送到注册对端手机号码的基站，如果对方接听了电话，就等于在这两部手机之间建立了通信连接。</p>
+
+<p style="text-indent:2em">基站收集的通信请求被汇集到控制中心（“边缘网络”），之后会再被接入到互连通信控制中心的主干网。这种手机网络的构成与互联网接人服务非常相似。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304141726477.png" alt="image-20230414172647397"></p>
+<center>--- 图 1.53 --- 移动通信</center>
+
+<hr>
+<p style="text-indent:2em"><b><i>LTE 与 语音呼叫：</i></b></p>
+
+<p style="text-indent:2em">第 3 代和第 3.5 代移动通信网络的设计初衷，是用来传输最高 64kbps 的语音呼叫以及其他少量的数据通信。而<b><i> LTE </i></b>被视作从 3G 向 4G 演变的过渡型技术，是 <b><i>3GPP</i></b> 制定的一种移动通信规范。根据情况不同，它最大可实现下行 300Mbps、上行 75Mbps 的无线通信。</p>
+
+<p style="text-indent:2em">在 LTE 的标准中，由于<b><i>声音也被当作 IP 数据包进行传输</i></b>，所以就有必要在整个网络上应用 TCP/IP 协议。然而，现实当中往往不可能一下子对网络中所有的硬件设备进行更换。对于这种情况，可采用 <b><i>CSFB</i></b> 的技术。这种技术让语音呼叫部分仅在手机通信网络中传输。使之保持与原来的语音呼叫处理一致。</p>
+
+<p style="text-indent:2em">以我们生活当中的道路交通为例，CSFB 就相当于将自家门口的道路改造拓宽之后，再修建两条通往市内和主干枢纽的道路，并让两条路分别适用于一般车辆（语音呼叫）和大型车辆（视频数据或通信量较大的应用）。类似地，在手机终端的语音呼叫中，CSFB 保证了通话语音保持与原来一样的高品质传输，让使用者感觉像在自己家里或公司中上网一样，丝毫没有对网络环境有任何不适应的感觉。</p>
+
+<p style="text-indent:2em">由于目前通信服务的多样性以及消费者所使用的手机终端日趋高速和高性能化，人们开始研发更多类似 LTE 这种旨在改善网络环境的技术。</p>
+
+<hr>
+<hr>
+<p style="text-indent:2em"><b><i>公共无线局域网对手机终端的认证：</i></b></p>
+
+<p style="text-indent:2em">在家里或公司的无线局域网中，其线路连接部分往往是固定的，使用者通常仅限于特定的人群。然而，对于公共无线局域网来说，由于运营商不同，所以为了识别每一位使用者的合法性，就有必要对使用者进行验证，以检查他（她）们是否为合法用户。在用户所使用的终端设备真正被连接到“接入层”之前，需要确保只有获得认证的用户才能连接该公共无线局域网。</p>
+
+<p style="text-indent:2em">在使用手机或智能手机等移动通信终端时，首先要确认自己的手机要签约哪个移动通信运营商。从而可以让公共无线局域网的提供商从手机终端获取信息以识别是否为网内用户。当然，对于公共无线局域网来说，除此之外一般没有其他特殊的认证要求。</p>
+
+<hr>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>LTE ：长期演进技术</p>
+<p>3GPP ：由各国标准化制定团体组成的制定第 3 代移动通信标准的组织。</p>
+<p>声音也被当作 IP 数据包进行传输 ：现在，语音通信也基本被数字化，都使用TCP&#x2F;P技术进行传输。</p>
+<p>CSFB ：Circuit Switched Fallback.</p>
+<hr>
+<h3 id="1-10-4从信息发布者的角度看网络"><a href="#1-10-4从信息发布者的角度看网络" class="headerlink" title="1.10.4	从信息发布者的角度看网络"></a>1.10.4	从信息发布者的角度看网络</h3><p style="text-indent:2em">提到网络信息传播，以往比较主流的做法是，个人和企业自己制作网站（主页）部署到服务器中将所要发布的信息公之于众。而现在，通过博客、<b><i>托管主机服务</i></b> 的案例日渐增多。这种方式的一大优点是不需要做服务器和网络运维的管理，只需要关注自己所要发布信息的特定网站即可。此外，在托管主机的服务中通常会有即时传播信息的机制。</p>
+
+<p style="text-indent:2em">以动画发布网站（一种替投稿者发布其动画作品的网站）为例。投稿者可能来自世界各地。网站会负责将他（她）们的作品上传到服务器进行发布。对于那些人气较高的动画作品，其访问量可能会达到每天几十万次。面对这么高的并发访问量，托管主机服务，为了减少访问延迟，会集合多个存储于一起，通过连接高速网络，以期提高响应速度。这种方式被人们称作数据中心。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304141753854.png" alt="image-20230414175345785"></p>
+<center>--- 图 1.54 --- 数据中心</center>
+
+<p style="text-indent:2em">数据中心由大型服务器、存储以及计算机网络构成。有些大型的数据中心甚至直接连接“主干网”。即使是小规模的数据中心，大多数情况下也会连接到“边缘网络”。</p>
+
+<p style="text-indent:2em">数据中心内部的网络中分布着3层交换机和高速路由器。为了减少网络延迟，也有人正在研究高性能2层交换机的使用。</p>
+
+<p style="text-indent:2em">本章，我们围绕着网络的基础知识与 TCP/IP 之间的关系展开了介绍。现在在日本，不仅是互联网，就连电视电话等日常极为普遍的信息传播方式也离不开 TCP/IP 技术。从下一章开始，我们将详细说明 TCP/IP 及其相关技术。本书虽然以初级入门为主，但对于网络技术人员来说却是必须要牢牢掌握的基础知识，还望大家仔细阅读。</p>
+
+<hr>
+<p style="text-indent:2em"><b><i>虚拟化和云：</i></b></p>
+
+<p style="text-indent:2em">以几个比较有特点的网站为背景介绍一下虚拟化与云。读者可能或多或少都访问过抽奖、网游、<b><i>内容</i></b>下载等网站。这些网站有一个共同的特点，那就是具有明显的访问高峰点。以提供抽奖的站点为例，在抽奖活动期间，白天或周末访问量都非常高，而在抽奖活动结束后基本无人问津。而且，在访问高峰期，网站又必须保证每一个用户都能正常访问，否则极可能会被起诉发生索赔事件。</p>
+
+<p style="text-indent:2em">类似于这种抽奖网站，有些站点所提供内容的种类和性质决定了它们实际上对网络资源的需求时刻都在发生变化。尤其在像数据中心一样配置大量的服务器提供对外服务的环境中，为每个网站和内容提供商分配固定的网络资源显然是低效的。</p>
+
+<p style="text-indent:2em">基于这样一个背景，出现了虚拟化技术。它是指当一个网站（也可以是其他系统）需要调整运营所使用的资源时，并不增减服务器、存储设备、网络等实际的物理设备，而是利用软件将这些物理设备虚拟化，在有必要增减资源的时候，通过软件按量增减的一种机制。通过此机制实现按需分配、按比例分配，对外提供可靠的服务。</p>
+
+<p style="text-indent:2em">利用虚拟化技术，根据使用者的情况动态调整必要资源的机制被人们称作“云”。而且，将虚拟化的系统根据需要自动地进行动态管理的部分被称作“智能协调层”。它能够将服务器、存储、网络看作一个整体进行管理。有了“云”，网络的使用者就可以实现不论何时何地都可以只获取或只提供需要信息的机制。</p>
+
+<p><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304141923300.png" alt="image-20230414192348261"></p>
+<center>--- 图 1.55 --- 云和智能协调</center>
+
+<hr>
+<hr>
+<p><b><i>脚注：</i></b></p>
+<p>托管主机服务 ：托管主机服务是指将用于信息发布的主机放置于互联网数据中心的机房，或者从该机房相赁一台计算机作为发布信息主机的服务。</p>
+<p>内容 ：内容(content)在此处是指集动画、文章、音乐、应用以及游戏软件于一体，提供阅览以及上传&#x2F;下载服务的一种信息集中体的统称。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">WangHao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/04/06/tujietcpip-1/">http://example.com/2023/04/06/tujietcpip-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">归途</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><a class="post-meta__tags" href="/tags/%E3%80%8A%E5%9B%BE%E8%A7%A3TCP-IP%E3%80%8B/">《图解TCP/IP》</a></div><div class="post_share"><div class="social-share" data-image="https://pic1.zhimg.com/80/v2-03a22891ccba9bccf6424dfd7cbf4be7_1440w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/04/15/tujietcpip-2/" title="《图解TCP/IP》（2）"><img class="cover" src="https://pic3.zhimg.com/80/v2-e5c15010b8ba4608a1974403a02a2da0_1440w.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">《图解TCP/IP》（2）</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/05/hello-world/" title="Hello World"><img class="cover" src="https://pic2.zhimg.com/80/v2-29e78b52051ce542adf6d786d61fbd19_1440w.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hello World</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/04/15/tujietcpip-2/" title="《图解TCP&#x2F;IP》（2）"><img class="cover" src="https://pic3.zhimg.com/80/v2-e5c15010b8ba4608a1974403a02a2da0_1440w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-15</div><div class="title">《图解TCP&#x2F;IP》（2）</div></div></a></div><div><a href="/2023/04/19/tujietcpip-3/" title="《图解TCP&#x2F;IP》（3）"><img class="cover" src="https://pic2.zhimg.com/80/v2-e22aaad20d20634f506f57fff0fcbc17_1440w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-19</div><div class="title">《图解TCP&#x2F;IP》（3）</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://picture-data-01.oss-cn-beijing.aliyuncs.com/blog_img1/202304092347441.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">WangHao</div><div class="author-info__description">人们聚和离、云朵来又往；讲故事的人，总有一个故事不愿讲。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/WH-wanghao/WH-wanghao.github.io"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/WH-wanghao" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2025450495@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2025450495&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC1%E7%AB%A0%E3%80%81%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-text">第1章、网络基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%87%BA%E7%8E%B0%E7%9A%84%E8%83%8C%E6%99%AF"><span class="toc-text">1.1	计算机网络出现的背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E6%99%AE%E5%8F%8A%E4%B8%8E%E5%A4%9A%E6%A0%B7%E5%8C%96"><span class="toc-text">1.1.1	计算机的普及与多样化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2%E4%BB%8E%E7%8B%AC%E7%AB%8B%E6%A8%A1%E5%BC%8F%E5%88%B0%E7%BD%91%E7%BB%9C%E4%BA%92%E8%BF%9E%E6%A8%A1%E5%BC%8F"><span class="toc-text">1.1.2	从独立模式到网络互连模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-3%E4%BB%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%9A%E4%BF%A1%E5%88%B0%E4%BF%A1%E6%81%AF%E9%80%9A%E4%BF%A1"><span class="toc-text">1.1.3	从计算机通信到信息通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">1.1.4	计算机网络的作用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%8F%91%E5%B1%95%E7%9A%84-7-%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="toc-text">1.2	计算机与网络发展的 7 个阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1%E6%89%B9%E5%A4%84%E7%90%86"><span class="toc-text">1.2.1	批处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2%E5%88%86%E6%97%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">1.2.2	分时系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-3%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="toc-text">1.2.3	计算机之间的通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-4%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E4%BA%A7%E7%94%9F"><span class="toc-text">1.2.4	计算机网络的产生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-5%E4%BA%92%E8%81%94%E7%BD%91%E7%9A%84%E6%99%AE%E5%8F%8A"><span class="toc-text">1.2.5	互联网的普及</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-6%E4%BB%A5%E4%BA%92%E8%81%94%E7%BD%91%E6%8A%80%E6%9C%AF%E4%B8%BA%E4%B8%AD%E5%BF%83%E7%9A%84%E6%97%B6%E4%BB%A3"><span class="toc-text">1.2.6	以互联网技术为中心的时代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-7%E4%BB%8E%E2%80%9C%E5%8D%95%E7%BA%AF%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E2%80%9D%E5%88%B0%E2%80%9C%E5%AE%89%E5%85%A8%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E2%80%9D"><span class="toc-text">1.2.7	从“单纯建立连接”到“安全建立连接”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-8%E6%89%8B%E6%8F%A1%E9%87%91%E5%88%9A%E9%92%BB%E7%9A%84-TCP-x2F-IP"><span class="toc-text">1.2.8	手握金刚钻的 TCP&#x2F; IP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3%E5%8D%8F%E8%AE%AE"><span class="toc-text">1.3	协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-1%E9%9A%8F%E5%A4%84%E5%8F%AF%E8%A7%81%E7%9A%84%E5%8D%8F%E8%AE%AE"><span class="toc-text">1.3.1	随处可见的协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7"><span class="toc-text">1.3.2	协议的必要性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3%E5%8D%8F%E8%AE%AE%E5%A6%82%E5%90%8C%E4%BA%BA%E4%B8%8E%E4%BA%BA%E7%9A%84%E5%AF%B9%E8%AF%9D"><span class="toc-text">1.3.3	协议如同人与人的对话</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-4%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E5%8D%8F%E8%AE%AE"><span class="toc-text">1.3.4	计算机中的协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-5%E5%88%86%E7%BB%84%E4%BA%A4%E6%8D%A2%E5%8D%8F%E8%AE%AE"><span class="toc-text">1.3.5	分组交换协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4%E5%8D%8F%E8%AE%AE%E7%94%B1%E8%B0%81%E8%A7%84%E5%AE%9A"><span class="toc-text">1.4	协议由谁规定 </span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-1%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%9A%E4%BF%A1%E7%9A%84%E8%AF%9E%E7%94%9F%E5%8F%8A%E5%85%B6%E6%A0%87%E5%87%86%E5%8C%96"><span class="toc-text">1.4.1	计算机通信的诞生及其标准化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-2%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%A0%87%E5%87%86%E5%8C%96"><span class="toc-text">1.4.2	协议的标准化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5%E5%8D%8F%E8%AE%AE%E5%88%86%E5%B1%82%E4%B8%8E-OSI-%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B"><span class="toc-text">1.5	协议分层与 OSI 参考模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-1%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%88%86%E5%B1%82"><span class="toc-text">1.5.1	协议的分层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-2%E9%80%9A%E8%BF%87%E5%AF%B9%E8%AF%9D%E7%90%86%E8%A7%A3%E5%88%86%E5%B1%82"><span class="toc-text">1.5.2	通过对话理解分层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-3OSI-%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B"><span class="toc-text">1.5.3	OSI 参考模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-4OSI-%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%90%84%E4%B8%AA%E5%88%86%E5%B1%82%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">1.5.4	OSI 参考模型中各个分层的作用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6OSI-%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B%E9%80%9A%E4%BF%A1%E5%A4%84%E7%90%86%E4%B8%BE%E4%BE%8B"><span class="toc-text">1.6	OSI 参考模型通信处理举例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-17%E5%B1%82%E9%80%9A%E4%BF%A1"><span class="toc-text">1.6.1	7层通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-2%E4%BC%9A%E8%AF%9D%E5%B1%82%E4%BB%A5%E4%B8%8A%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-text">1.6.2	会话层以上的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-3%E4%BC%A0%E8%BE%93%E5%B1%82%E4%BB%A5%E4%B8%8B%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-text">1.6.3	传输层以下的处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">1.7	传输方式的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7-1%E9%9D%A2%E5%90%91%E6%9C%89%E8%BF%9E%E6%8E%A5%E5%9E%8B%E5%92%8C%E9%9D%A2%E5%90%91%E6%97%A0%E8%BF%9E%E6%8E%A5%E5%9E%8B"><span class="toc-text">1.7.1	面向有连接型和面向无连接型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7-2%E7%94%B5%E8%B7%AF%E4%BA%A4%E6%8D%A2%E4%B8%8E%E5%88%86%E7%BB%84%E4%BA%A4%E6%8D%A2"><span class="toc-text">1.7.2	电路交换与分组交换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7-3-%E6%A0%B9%E6%8D%AE%E6%8E%A5%E6%94%B6%E7%AB%AF%E6%95%B0%E9%87%8F%E5%88%86%E7%B1%BB"><span class="toc-text">1.7. 3 	根据接收端数量分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-8-%E5%9C%B0%E5%9D%80"><span class="toc-text">1.8 	地址</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-8-1%E5%9C%B0%E5%9D%80%E7%9A%84%E5%94%AF%E4%B8%80%E6%80%A7"><span class="toc-text">1.8.1	地址的唯一性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-8-2%E5%9C%B0%E5%9D%80%E7%9A%84%E5%B1%82%E6%AC%A1%E6%80%A7"><span class="toc-text">1.8.2	地址的层次性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-9%E7%BD%91%E7%BB%9C%E7%9A%84%E6%9E%84%E6%88%90%E8%A6%81%E7%B4%A0"><span class="toc-text">1.9	网络的构成要素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-9-1%E9%80%9A%E4%BF%A1%E5%AA%92%E4%BB%8B%E4%B8%8E%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF"><span class="toc-text">1.9.1	通信媒介与数据链路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-9-2%E7%BD%91%E5%8D%A1"><span class="toc-text">1.9.2	网卡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-9-3%E4%B8%AD%E7%BB%A7%E5%99%A8"><span class="toc-text">1.9.3	中继器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-9-4%E7%BD%91%E6%A1%A5-x2F-2%E5%B1%82%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-text">1.9.4	网桥 &#x2F; 2层交换机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-9-5%E8%B7%AF%E7%94%B1%E5%99%A8-x2F-3%E5%B1%82%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-text">1.9.5	路由器 &#x2F;  3层交换机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-9-64-7-%E5%B1%82%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-text">1.9.6	4 ~ 7 层交换机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-9-7%E7%BD%91%E5%85%B3"><span class="toc-text">1.9.7	网关</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-10%E7%8E%B0%E4%BB%A3%E7%BD%91%E7%BB%9C%E5%AE%9E%E6%80%81"><span class="toc-text">1.10	现代网络实态</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-10-1%E7%BD%91%E7%BB%9C%E7%9A%84%E6%9E%84%E6%88%90"><span class="toc-text">1.10.1	网络的构成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-10-2%E4%BA%92%E8%81%94%E7%BD%91%E9%80%9A%E4%BF%A1"><span class="toc-text">1.10.2	互联网通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-10-3%E7%A7%BB%E5%8A%A8%E9%80%9A%E4%BF%A1"><span class="toc-text">1.10.3	移动通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-10-4%E4%BB%8E%E4%BF%A1%E6%81%AF%E5%8F%91%E5%B8%83%E8%80%85%E7%9A%84%E8%A7%92%E5%BA%A6%E7%9C%8B%E7%BD%91%E7%BB%9C"><span class="toc-text">1.10.4	从信息发布者的角度看网络</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/05/04/English-2023-5-4/" title="English-2023/5/4"><img src="https://picx.zhimg.com/80/v2-9c50d3af0bc62a0e8b6e89e24c769317_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="English-2023/5/4"/></a><div class="content"><a class="title" href="/2023/05/04/English-2023-5-4/" title="English-2023/5/4">English-2023/5/4</a><time datetime="2023-05-03T23:49:37.000Z" title="发表于 2023-05-04 07:49:37">2023-05-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/19/tujietcpip-3/" title="《图解TCP/IP》（3）"><img src="https://pic2.zhimg.com/80/v2-e22aaad20d20634f506f57fff0fcbc17_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《图解TCP/IP》（3）"/></a><div class="content"><a class="title" href="/2023/04/19/tujietcpip-3/" title="《图解TCP/IP》（3）">《图解TCP/IP》（3）</a><time datetime="2023-04-19T12:28:06.000Z" title="发表于 2023-04-19 20:28:06">2023-04-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/15/tujietcpip-2/" title="《图解TCP/IP》（2）"><img src="https://pic3.zhimg.com/80/v2-e5c15010b8ba4608a1974403a02a2da0_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《图解TCP/IP》（2）"/></a><div class="content"><a class="title" href="/2023/04/15/tujietcpip-2/" title="《图解TCP/IP》（2）">《图解TCP/IP》（2）</a><time datetime="2023-04-15T10:19:21.000Z" title="发表于 2023-04-15 18:19:21">2023-04-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/06/tujietcpip-1/" title="《图解TCP/IP》（1）"><img src="https://pic1.zhimg.com/80/v2-03a22891ccba9bccf6424dfd7cbf4be7_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《图解TCP/IP》（1）"/></a><div class="content"><a class="title" href="/2023/04/06/tujietcpip-1/" title="《图解TCP/IP》（1）">《图解TCP/IP》（1）</a><time datetime="2023-04-06T15:12:23.000Z" title="发表于 2023-04-06 23:12:23">2023-04-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/05/hello-world/" title="Hello World"><img src="https://pic2.zhimg.com/80/v2-29e78b52051ce542adf6d786d61fbd19_1440w.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/2023/04/05/hello-world/" title="Hello World">Hello World</a><time datetime="2023-04-04T17:28:16.045Z" title="发表于 2023-04-05 01:28:16">2023-04-05</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://pic1.zhimg.com/80/v2-03a22891ccba9bccf6424dfd7cbf4be7_1440w.webp')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By WangHao</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="8281432682" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-loop="all" data-order="random"> </div><script async src="/js/title.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,YOU" data-fontsize="15px" data-random="false" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></body></html>
